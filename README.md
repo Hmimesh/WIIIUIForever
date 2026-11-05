@@ -1,3 +1,26 @@
+Looking for a working version for WoW Forever?  
+Download one from here (not made by me):  
+[https://www.curseforge.com/wow/addons/warcraft-3-ui-forever-edition](https://www.curseforge.com/wow/addons/warcraft-3-ui-forever-edition)
+
+***
+
+![WIIIUI_cover_text_2](https://user-images.githubusercontent.com/97316608/149594045-c5f69b42-0634-4792-a9a6-820b3527971b.png)
+
+
+# WIIIUI
+**WIIIUI** was made for Warcraft III fans or people who just enjoy the aesthetics.  
+
+This addon have the four faction themes from Warcraft III, Human, Orc, Undead and Night Elf. The addon also have the possibility to add your own theme albeit it does not have good support for it with the initial release. 
+It also offers various feature that can be read below and instruction on how to modify the addon.
+
+A video demonstrating the different menu options available.  
+https://youtu.be/agffQHWyWh8
+
+Please give feedback for improvements or new features for future releases.  
+Don't forget to check out [Known issues](https://github.com/Fiurs-Hearth/WarcraftIII-UI_master#known-issues) section.  
+
+Contact me on Discord: Fiur#8658
+
 ## $\color{#f00}{\textsf{NEW - Align Center Option, Chat area width option.}}$
 - Option to center entire UI
 - **Disabled** (default) → The UI uses the classic Warcraft III–style anchoring based on the screen edges.  
@@ -20,25 +43,6 @@ Center UI, no chat area
 Center UI, no chat area and no inventory  
 <img width="1920" height="227" alt="image" src="https://github.com/user-attachments/assets/07fa06e6-b87f-4def-a9e1-76e50236dc0f" />
 
-***
-
-
-![WIIIUI_cover_text_2](https://user-images.githubusercontent.com/97316608/149594045-c5f69b42-0634-4792-a9a6-820b3527971b.png)
-
-
-# WIIIUI
-**WIIIUI** was made for Warcraft III fans or people who just enjoy the aesthetics.  
-
-This addon have the four faction themes from Warcraft III, Human, Orc, Undead and Night Elf. The addon also have the possibility to add your own theme albeit it does not have good support for it with the initial release. 
-It also offers various feature that can be read below and instruction on how to modify the addon.
-
-A video demonstrating the different menu options available.  
-https://youtu.be/agffQHWyWh8
-
-Please give feedback for improvements or new features for future releases.  
-Don't forget to check out [Known issues](https://github.com/Fiurs-Hearth/WarcraftIII-UI_master#known-issues) section.  
-
-Contact me on Discord: Fiur#8658
 
 ## Installation
 * [Download the addon](https://github.com/Fiurs-Hearth/WIIIUI/archive/refs/heads/master.zip)
