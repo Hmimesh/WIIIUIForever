@@ -1,17 +1,19 @@
 # WIIIUI Forever
 
+<img src="docs/images/addon-icon.png" width="128" height="128" alt="WIIIUI Forever: gold W and UI lettering over a teal III" />
+
 ### Bring the Warcraft III command console into World of Warcraft: Forever.
 
 **Four faction-inspired interfaces. Animated character portraits. A customizable HUD. One familiar Warcraft III feeling.**
 
-[![Version](https://img.shields.io/badge/version-0.6.4%20alpha-orange)](https://github.com/Hmimesh/WIIIUIForever)
+[![Version](https://img.shields.io/badge/version-0.6.5%20alpha-orange)](https://github.com/Hmimesh/WIIIUIForever)
 [![Client](https://img.shields.io/badge/client-WoW%20Forever-blue)](https://github.com/Hmimesh/WIIIUIForever)
 [![Interface](https://img.shields.io/badge/interface-16001-informational)](https://github.com/Hmimesh/WIIIUIForever)
 [![Issues](https://img.shields.io/github/issues/Hmimesh/WIIIUIForever)](https://github.com/Hmimesh/WIIIUIForever/issues)
 
 WIIIUI Forever reimagines [Fiur's original WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI) for the **WoW Forever** client. It frames WoW's native controls in Warcraft III-inspired faction consoles, adds practical customization, and gives your character screen a classic strategy-game look.
 
-> **Alpha — v0.6.4.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested.
+> **Alpha — v0.6.5.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested.
 
 <p align="center">
   <img src="docs/screenshots/orc-theme-with-pet.png" alt="Orc console with animated portrait and pet frame" width="49%">

@@ -12,6 +12,7 @@ Thank you to Fiur for creating and sharing the original Warcraft III-style inter
 - The Forsaken-style panel, border, and slot textures were converted from the locally installed Warcraft III: Reforged archive.
 - Additional faction rails, button frames, clock ornaments, flags, the day/night panorama, and resource/status icons were converted from the same local Warcraft III installation. `tools/convert-wc3-hud-assets.py` records the DDS-to-TGA mapping for the ribbon/status artwork.
 - Faction cursor textures remain in the asset folder as reference. The active addon uses the WoW Forever client's pointer.
+- The addon-list icon (`WIIIUIForever/art/icon.tga`, with a PNG in `docs/images/`) was generated with the built-in imagegen tool using the maintainer's Warcraft III icon reference and custom UI lettering. It is not an icon extracted from the game. See [the icon design prompt](docs/ICON.md).
 - The screenshots in `docs/screenshots/` were supplied by this project's maintainer. They illustrate the alpha addon in game; other addons and client graphics modifications visible in them are not bundled here.
 
 Warcraft, Warcraft III, World of Warcraft, their artwork, and their trademarks belong to Blizzard Entertainment. Attribution here does not relicense Blizzard artwork or upstream material. No blanket license grant over those assets is made by this repository.
