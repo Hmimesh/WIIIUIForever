@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+
+# Other projects sharing this local workspace are not part of WIIIUI Forever.
+/AdventureScore/
+/companion/
+/dist/
+/RecordPlayer-README.md
+/Start-RecordPlayer.cmd
+/tools/*
+!/tools/convert-wc3-hud-assets.py
+
+# Local game state, diagnostics, and credentials are never distributed.
+WTF/
+SavedVariables/
+*.log
+.env
+.env.*

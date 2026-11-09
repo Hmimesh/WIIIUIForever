@@ -1,0 +1,15 @@
+## Interface: 16001
+## Title: WIIIUI Forever
+## Notes: Warcraft III console art for World of Warcraft: Forever
+## Version: 0.6.4
+## SavedVariables: WIIIUIForeverDB
+## SavedVariablesPerCharacter: WIIIUIForeverCharacterDB
+
+Art.lua
+StatusIndicators.lua
+Profile.lua
+SessionRibbon.lua
+QuickSlots.lua
+CharacterSheet.lua
+NativeLayout.lua
+WIIIUIForever.lua
