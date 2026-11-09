@@ -1,8 +1,10 @@
 ## Interface: 16001
 ## Title: WIIIUI Forever
+## Author: Hmimesh
+## X-Website: https://github.com/Hmimesh/WIIIUIForever
 ## IconTexture: Interface\AddOns\WIIIUIForever\art\icon.tga
 ## Notes: Warcraft III console art for World of Warcraft: Forever
-## Version: 0.6.5
+## Version: 0.6.13-alpha1
 ## SavedVariables: WIIIUIForeverDB
 ## SavedVariablesPerCharacter: WIIIUIForeverCharacterDB
 

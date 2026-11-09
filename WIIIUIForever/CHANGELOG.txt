@@ -1,0 +1,36 @@
+0.6.13-alpha1
+- Join the Human chat rail through two mortar gaps with one complete stone span.
+- Use plain bone in the Undead chat bridge instead of duplicating the large fracture.
+- Keep the Night Elf and Orc chat borders unchanged.
+
+0.6.12-alpha1
+- Remove the overlapping leafy sections in the Night Elf chat border.
+- Join its corner to one continuous beam and the original right ornament.
+- Preserve the Human, Orc and Undead borders.
+
+0.6.11-alpha1
+- Give each theme an independent chat-border texture set.
+- Restore Night Elf's full corner sheet without reusing cropped or blended regions.
+- Keep Human and Undead joins separate when switching themes.
+
+0.6.10-alpha1
+- Join the Human chat border through its low stone course without extra raised stones.
+- Match the Undead chat bridge and end to the same bone artwork and baseline.
+- Preserve the approved Orc and Night Elf border geometry and artwork.
+
+0.6.9-alpha1
+- Keep the original long chat-top artwork intact instead of repeating its decoration.
+- Use forward-facing interior rail sections with matching edge profiles.
+- Leave action buttons, panel positions, portraits and XP sizing unchanged.
+
+0.6.8-alpha1
+- Align border bodies, fixed corners and shared posts at a consistent scale.
+- Keep only one post between the quick slots and chat.
+- Match the six quick-slot buttons to the original texture's wells.
+- Correct the Night Elf chat corner's beam baseline.
+- Use interior border sections with matching mirrored edge pixels.
+- Round border and XP frame layout to physical pixels using the client API.
+- Retain the medium XP bar size and its rested-XP display.
+- Include the addon-list icon and install/feedback instructions.
+
+This is an alpha build. Please report issues through the project's GitHub page.

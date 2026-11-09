@@ -13,8 +13,8 @@ function addon.CreateQuickSlots(character)
     holder:SetFrameStrata("LOW")
     holder:Hide()
     local heading = holder:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    heading:SetPoint("BOTTOMLEFT", 1, 116)
-    heading:SetWidth(59)
+    heading:SetPoint("BOTTOMLEFT", 0, 123)
+    heading:SetWidth(80)
     heading:SetJustifyH("CENTER")
     heading:SetText("Inventory")
 
@@ -112,8 +112,8 @@ function addon.CreateQuickSlots(character)
         local button = CreateFrame("Button", "WIIIUIForeverQuickSlot" .. index, holder, "SecureActionButtonTemplate")
         button.slotIndex = index
         button:SetSize(25, 25)
-        button:SetPoint("CENTER", holder, "BOTTOMLEFT", 15 + (index - 1) % 2 * 31,
-            91 - math.floor((index - 1) / 2) * 37)
+        button:SetPoint("CENTER", holder, "BOTTOMLEFT", 20 + (index - 1) % 2 * 40,
+            96 - math.floor((index - 1) / 2) * 40)
         button:RegisterForClicks("AnyUp")
         button:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
         local icon = button:CreateTexture(nil, "ARTWORK")

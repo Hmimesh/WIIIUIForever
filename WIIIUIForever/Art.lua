@@ -13,38 +13,72 @@ local themes = {
     human = {
         label = "Human",
         mapButtons = { x = 166, 133, 111, 89, 66, 39 },
-        rail = { 512, 64, 61, 15, 512, 56 },
+        -- Both ends fall in the low mortar course, between raised stones.
+        rail = { 512, 64, 141, 15, 378, 56 },
+        railStart = -8,
+        railY = 119,
         divider = { 256, 512, 21, 230, 256, 512 },
-        chatTop = { 256, 128, 0, 73, 162, 128 },
-        chatBottom = { 256, 32, 0, 18, 157, 32 },
-        chatSide = { 32, 512, 0, 0, 32, 512 },
+        chatTop = { 512, 128, 0, 73, 372, 128 },
+        -- One complete stone span bridges two mortar gaps. Do not repeat a
+        -- tiny low-course fragment or leave the corner's last stone behind it.
+        chatBody = { 512, 128, 8, 73, 140, 128 },
+        chatBodyFile = "bottom right\\BottomRight_Top",
+        chatCornerClip = 314,
+        chatBlend = 8,
+        chatPostRight = 69, chatCornerRight = 314, chatBeamBottom = 84,
+        chatBottom = { 512, 64, 0, 52, 341, 64 },
+        chatSide = { 32, 512, 0, 0, 32, 310 },
     },
     orc = {
         label = "Orc",
         mapButtons = { x = 166, 134, 112, 89, 67, 37 },
-        rail = { 512, 64, 0, 17, 512, 64 },
+        -- Start beyond the first clamp; the original clamp inside the span
+        -- supplies the joint without reflecting the bolts or metal grain.
+        rail = { 512, 64, 137, 17, 510, 64 },
+        railStart = -38,
+        railY = 115,
         divider = { 256, 512, 0, 208, 256, 512 },
-        chatTop = { 256, 128, 0, 45, 163, 128 },
-        chatBottom = { 256, 32, 0, 18, 157, 32 },
-        chatSide = { 32, 512, 0, 0, 32, 512 },
+        chatTop = { 512, 128, 0, 46, 371, 128 },
+        chatBody = { 256, 128, 18, 45, 150, 128 },
+        chatPostRight = 78, chatCornerRight = 353, chatBeamBottom = 84,
+        chatBottom = { 512, 64, 0, 51, 371, 64 },
+        chatSide = { 32, 512, 0, 0, 32, 310 },
     },
     undead = {
         label = "Undead",
         mapButtons = { x = 166, 134, 112, 89, 67, 39 },
-        rail = { 512, 64, 0, 1, 295, 64 },
+        rail = { 512, 64, 89, 1, 275, 52 },
+        railStart = -8,
         divider = { 256, 512, 0, 215, 256, 512 },
-        chatTop = { 256, 128, 0, 84, 162, 128 },
-        chatBottom = { 256, 32, 0, 18, 141, 32 },
-        chatSide = { 32, 512, 0, 0, 32, 512 },
+        chatTop = { 512, 128, 45, 50, 373, 128 },
+        -- Bridge with the plain bone after the large fracture. The corner
+        -- and right end already contain that fracture; repeating it crowds
+        -- the join and exposes the cut between sheets.
+        chatBody = { 512, 128, 166, 50, 295, 128 },
+        chatBodyFile = "bottom right\\BottomRight_Top",
+        chatCornerClip = 361,
+        chatBlend = 8,
+        chatPostRight = 75, chatCornerRight = 361, chatBeamBottom = 84,
+        chatBottom = { 512, 64, 0, 50, 341, 64 },
+        chatSide = { 32, 512, 0, 0, 32, 310 },
     },
     nightelf = {
         label = "Night Elf",
         mapButtons = { x = 166, 136, 114, 91, 69, 39 },
-        rail = { 512, 128, 0, 50, 512, 128 },
+        rail = { 512, 128, 45, 50, 467, 128 },
+        railStart = -25,
+        railY = 111,
         divider = { 256, 512, 0, 168, 256, 512 },
-        chatTop = { 256, 128, 0, 63, 215, 127 },
-        chatBottom = { 256, 32, 0, 20, 144, 32 },
-        chatSide = { 64, 512, 27, 22, 64, 512 },
+        -- End the corner between leaf clusters; use one uninterrupted beam
+        -- before the original right-hand ornament instead of stacking foliage.
+        chatTop = { 512, 128, 280, 54, 422, 127 },
+        chatBody = { 512, 128, 90, 54, 356, 127 },
+        chatBodyFile = "bottom right\\BottomRight_Top",
+        chatCornerClip = 395,
+        chatBlend = 8,
+        chatPostRight = 71, chatCornerRight = 395, chatBeamBottom = 94,
+        chatBottom = { 512, 64, 0, 52, 341, 64 },
+        chatSide = { 64, 512, 27, 22, 64, 332 },
     },
 }
 addon.themes = themes
@@ -54,18 +88,36 @@ function addon.CreateArt()
     console:SetFrameStrata("BACKGROUND")
     console:SetPoint("BOTTOM")
     console:SetSize(addon.width, 256)
+    console:SetRoundLayoutToNearestPixel(true)
     console:Hide()
 
     local pieces = {}
+    local strips = {}
+    local function rect(texture, parent, x, y, width, height)
+        texture:ClearAllPoints()
+        texture:SetSize(width, height)
+        texture:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", x, y)
+        -- Round shared edges, not a separately rounded origin plus width.
+        texture:SetPoint("TOPRIGHT", parent, "BOTTOMLEFT", x + width, y + height)
+    end
     local function piece(file, x, y, width, height, crop, layer, parent)
         parent = parent or console
         local texture = parent:CreateTexture(nil, layer or "ARTWORK")
-        texture:SetSize(width, height)
-        texture:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", x, y)
+        texture:SetRoundLayoutToNearestPixel(true)
+        rect(texture, parent, x, y, width, height)
         if file then
             pieces[#pieces + 1] = { texture = texture, file = file, crop = crop }
         end
         return texture
+    end
+
+    local function strip(file, x, y, width, cropKey, layer)
+        local entry = { file = file, x = x, y = y, width = width, cropKey = cropKey, textures = {} }
+        for index = 1, 8 do
+            entry.textures[index] = console:CreateTexture(nil, layer or "ARTWORK")
+            entry.textures[index]:SetRoundLayoutToNearestPixel(true)
+        end
+        strips[#strips + 1] = entry
     end
 
     local grid, chat = addon.grid, addon.chat
@@ -128,18 +180,74 @@ function addon.CreateArt()
             end
         end
     end
-    for index = 0, 1 do
-        piece("actionbar\\ext1", grid.x + index * 234, 117, 246, 25, "rail", "OVERLAY")
-    end
+    -- The source beam overlaps the portrait's right-hand cap. Keep it behind
+    -- that cap so the join does not create a second rivet or cover the arch.
+    strip("actionbar\\ext1", grid.x, 117, grid.width, "rail", "ARTWORK")
+    for _, texture in ipairs(strips[#strips].textures) do texture:SetDrawLayer("ARTWORK", -1) end
 
-    for index = 0, 2 do
-        local x = chat.x + index * 117
-        piece("bottom right\\BottomRightFillerTop", x, 146, 126, 21, "chatTop")
-        piece("bottom right\\BottomRightFillerBottom", x, 0, 126, 7, "chatBottom")
+    -- Each theme owns its chat textures. Once built, their source sheets,
+    -- UVs, gradients and geometry are immutable; a theme switch only changes
+    -- visibility. Human/Undead repairs cannot retarget Night Elf's regions.
+    local chatArt = {}
+    local function createChatArt(themeName)
+        local theme, textures = themes[themeName], {}
+        local function texture(file, x, y, width, height, crop, sub)
+            local region = console:CreateTexture(nil, "ARTWORK", nil, sub or 0)
+            region:SetRoundLayoutToNearestPixel(true)
+            region:SetTexture(addon.artPath .. themeName .. "\\bottom right\\" .. file .. ".tga")
+            rect(region, console, x, y, width, height)
+            if crop then
+                local atlasWidth, atlasHeight, left, top, right, bottom = unpack(crop)
+                region:SetTexCoord(left / atlasWidth, right / atlasWidth, top / atlasHeight, bottom / atlasHeight)
+            end
+            textures[#textures + 1] = region
+            return region
+        end
+        local function repeatBody(file, x, y, width, crop)
+            local atlasWidth, atlasHeight, left, top, right, bottom = unpack(crop)
+            local tileWidth, height = (right - left) / 2, (bottom - top) / 2
+            local offset = 0
+            while offset < width do
+                local partWidth = math.min(tileWidth, width - offset)
+                texture(file, x + offset, y, partWidth, height,
+                    { atlasWidth, atlasHeight, left, top, left + partWidth * 2, bottom })
+                offset = offset + partWidth
+            end
+        end
+        local cornerX = chat.x + 15 - theme.chatPostRight / 2
+        local cornerY = 142 + theme.chatBeamBottom / 2 - 256
+        local width, height, left, top, right, bottom = unpack(theme.chatTop)
+        local topWidth, topHeight = (right - left) / 2, (bottom - top) / 2
+        local topX, topY = addon.width - topWidth, theme.chatTopY or 142
+        local blend = theme.chatBlend or 0
+        local bodyX = cornerX + theme.chatCornerRight / 2 - 8
+        local bodyWidth = math.max(0, topX + 8 - bodyX)
+        local bodyFile = theme.chatBodyFile and "BottomRight_Top" or "BottomRightFillerTop"
+        repeatBody(bodyFile, bodyX, 142, bodyWidth, theme.chatBody)
+        texture("BottomRight_Top", topX + blend, topY, topWidth - blend, topHeight,
+            { width, height, left + blend * 2, top, right, bottom })
+        repeatBody("BottomRight_Bottom", chat.x, 0, chat.width, theme.chatBottom)
+        local cornerRight = theme.chatCornerClip or 512
+        local cornerCore = cornerRight - blend * 2
+        -- Keep each corner's post at native size; trim only its beam overlap.
+        texture("right_part_lid", cornerX, cornerY, cornerCore / 2, 256,
+            cornerCore < 512 and { 512, 512, 0, 0, cornerCore, 512 } or nil)
+        if blend > 0 then
+            local cornerBlend = texture("right_part_lid", cornerX + cornerCore / 2, cornerY, blend, 256,
+                { 512, 512, cornerCore, 0, cornerRight, 512 }, 1)
+            cornerBlend:SetGradient("HORIZONTAL", CreateColor(1, 1, 1, 1), CreateColor(1, 1, 1, 0))
+            local topBlend = texture("BottomRight_Top", topX, topY, blend, topHeight,
+                { width, height, left, top, left + blend * 2, bottom }, 1)
+            topBlend:SetGradient("HORIZONTAL", CreateColor(1, 1, 1, 0), CreateColor(1, 1, 1, 1))
+        end
+        local sideWidth = (theme.chatSide[5] - theme.chatSide[3]) / 2
+        texture("BottomRight_Middle", addon.width - sideWidth, 0, sideWidth, 155, theme.chatSide)
+        chatArt[themeName] = textures
     end
-    piece("bottom right\\BottomRight_Middle", addon.width - 12, 0, 12, 155, "chatSide")
-    local inventory = piece("inventory\\inventory", addon.quickSlots.x, 0, addon.quickSlots.width, addon.quickSlots.height,
-        { 512, 512, 0, 200, 224, 512 }, "OVERLAY")
+    -- Two native 40-unit wells, with the shared right-hand post supplied by
+    -- the chat corner. Do not squeeze another copy of that post into 88 units.
+    local inventory = piece("inventory\\inventory", addon.quickSlots.x, 0, 80, 256,
+        { 512, 512, 0, 0, 160, 512 }, "OVERLAY")
     local divider = piece("inventory\\no_inventory", 983, 0, 107, 148, "divider", "OVERLAY")
     divider:Hide()
 
@@ -160,6 +268,37 @@ function addon.CreateArt()
             if crop then
                 local width, height, left, top, right, bottom = unpack(crop)
                 entry.texture:SetTexCoord(left / width, right / width, top / height, bottom / height)
+            end
+        end
+        -- All source pixels have the same half-size density. Rail crops end
+        -- on matching cross-sections of mortar, metal, bone or foliage, so
+        -- repeats keep their original direction without overlapping motifs.
+        for _, entry in ipairs(strips) do
+            local width, height, left, top, right, bottom = unpack(theme[entry.cropKey])
+            local tileWidth, tileHeight = (right - left) / 2, (bottom - top) / 2
+            local inset = entry.cropKey == "rail" and (theme.railStart or 0) or 0
+            local stripWidth = entry.width - inset + (entry.cropKey == "rail" and 8 or 0)
+            local startX = entry.x + inset
+            local offset = 0
+            for index, texture in ipairs(entry.textures) do
+                local remaining = stripWidth - offset
+                texture:SetShown(remaining > 0)
+                if remaining > 0 then
+                    local partWidth = math.min(tileWidth, remaining)
+                    local last = remaining <= tileWidth
+                    local sourceLeft = left
+                    texture:SetTexture(addon.artPath .. themeName .. "\\" .. entry.file .. ".tga")
+                    local y = theme.railY or entry.y
+                    rect(texture, self, startX + offset, y, partWidth, tileHeight)
+                    texture:SetTexCoord(sourceLeft / width, (sourceLeft + partWidth * 2) / width, top / height, bottom / height)
+                    offset = last and stripWidth or (offset + tileWidth)
+                end
+            end
+        end
+        if not chatArt[themeName] then createChatArt(themeName) end
+        for name, textures in pairs(chatArt) do
+            for _, texture in ipairs(textures) do
+                texture:SetShown(name == themeName)
             end
         end
         if self.statusIndicators then addon.UpdatePlayerStatus(self) end

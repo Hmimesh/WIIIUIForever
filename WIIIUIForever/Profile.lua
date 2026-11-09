@@ -224,8 +224,9 @@ function addon.CreateProfile(console, character)
     console.playerName = text(console, 307, 112, 190, "GameFontHighlight", "CENTER")
 
     local xp = CreateFrame("StatusBar", nil, console)
-    xp:SetSize(184, 16)
-    xp:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", 310, 89)
+    xp:SetRoundLayoutToNearestPixel(true)
+    xp:SetSize(170, 12)
+    xp:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", 317, 91)
     xp:SetStatusBarTexture(addon.artPath .. "other\\xpProgressBar.tga")
     xp:SetStatusBarColor(0.63, 0.22, 0.85)
     local background = xp:CreateTexture(nil, "BACKGROUND")
@@ -233,10 +234,11 @@ function addon.CreateProfile(console, character)
     background:SetColorTexture(0.025, 0.018, 0.012, 1)
     for index, file in ipairs({ "xp1", "xp2", "xp3" }) do
         local frame = xp:CreateTexture(nil, "OVERLAY", nil, 1)
+        frame:SetRoundLayoutToNearestPixel(true)
         frame:SetTexture(addon.artPath .. "other\\" .. file .. ".tga")
         frame:SetTexCoord(0, 1, 7 / 64, 1)
-        frame:SetSize(index == 2 and 184 or 6, 23)
-        frame:SetPoint("BOTTOMLEFT", xp, "BOTTOMLEFT", index == 1 and -6 or (index == 3 and 184 or 0), -3)
+        frame:SetSize(index == 2 and 170 or 5, 18)
+        frame:SetPoint("BOTTOMLEFT", xp, "BOTTOMLEFT", index == 1 and -5 or (index == 3 and 170 or 0), -3)
     end
     local rested = xp:CreateTexture(nil, "ARTWORK", nil, 1)
     rested:SetTexture(addon.artPath .. "other\\xpProgressBar.tga")
@@ -251,7 +253,7 @@ function addon.CreateProfile(console, character)
         end
     end)
     console.xp = xp
-    console.level = text(xp, 0, 2, 184, "GameFontHighlightSmall", "CENTER")
+    console.level = text(xp, 0, 0, 170, "GameFontHighlightSmall", "CENTER")
 
     character.profileStats = type(character.profileStats) == "table" and character.profileStats or {}
     console.profileStats = character.profileStats

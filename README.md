@@ -1,23 +1,23 @@
 # WIIIUI Forever
 
-<img src="docs/images/addon-icon.png" width="128" height="128" alt="WIIIUI Forever: gold W and UI lettering over a teal III" />
-
 ### Bring the Warcraft III command console into World of Warcraft: Forever.
 
 **Four faction-inspired interfaces. Animated character portraits. A customizable HUD. One familiar Warcraft III feeling.**
 
-[![Version](https://img.shields.io/badge/version-0.6.5%20alpha-orange)](https://github.com/Hmimesh/WIIIUIForever)
+[![Version](https://img.shields.io/badge/version-0.6.13%20alpha-orange)](https://github.com/Hmimesh/WIIIUIForever)
 [![Client](https://img.shields.io/badge/client-WoW%20Forever-blue)](https://github.com/Hmimesh/WIIIUIForever)
 [![Interface](https://img.shields.io/badge/interface-16001-informational)](https://github.com/Hmimesh/WIIIUIForever)
 [![Issues](https://img.shields.io/github/issues/Hmimesh/WIIIUIForever)](https://github.com/Hmimesh/WIIIUIForever/issues)
 
 WIIIUI Forever reimagines [Fiur's original WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI) for the **WoW Forever** client. It frames WoW's native controls in Warcraft III-inspired faction consoles, adds practical customization, and gives your character screen a classic strategy-game look.
 
-> **Alpha — v0.6.5.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested.
+> **Alpha — v0.6.13-alpha1.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
+
+This update refines the four faction borders, gives each theme its own chat-border textures, fits the XP bar inside the character panel, and aligns the six quick slots with their artwork. See the [changelog](WIIIUIForever/CHANGELOG.txt).
 
 <p align="center">
-  <img src="docs/screenshots/orc-theme-with-pet.png" alt="Orc console with animated portrait and pet frame" width="49%">
-  <img src="docs/screenshots/undead-theme.png" alt="Undead console with six-slot quick panel" width="49%">
+  <img src="docs/screenshots/orc-theme-borders.png" alt="Orc console with refined wood and metal borders" width="49%">
+  <img src="docs/screenshots/undead-theme-borders.png" alt="Undead console with refined bone borders" width="49%">
 </p>
 
 **[Install](#installation)** · **[Features](#features-at-a-glance)** · **[Customization guide](docs/CONFIGURATION.md)** · **[Report a bug](https://github.com/Hmimesh/WIIIUIForever/issues)**
@@ -42,24 +42,33 @@ No required companion addons. No MoveAnything or original WIIIUI installation ne
 
 ### The four faction consoles
 
-**Orc — with a pet and equipment-aware stats**
+**Orc — wood, metal, and the spiked chat border**
 
-![Orc theme with pet frame, ammo, and melee DPS](docs/screenshots/orc-theme-with-pet.png)
+![Orc console and session ribbon with refined borders](docs/screenshots/orc-theme-borders.png)
 
 **Undead — animated portrait, quick slots, and session ribbon**
 
-![Undead theme with quick slots and session ribbon](docs/screenshots/undead-theme.png)
+![Undead console with quick slots, session ribbon, and refined bone borders](docs/screenshots/undead-theme-borders.png)
 
-**Human — starter layout and day/night ribbon**
+**Human — stone console and day/night ribbon**
 
-![Human starter layout](docs/screenshots/human-starter-layout.png)
-![Human theme with session ribbon in Northshire](docs/screenshots/human-session-ribbon.png)
+![Human console with stone borders and blue session ribbon](docs/screenshots/human-theme-borders.png)
 
 **Night Elf — faction console and ribbon**
 
-![Night Elf theme with ribbon](docs/screenshots/night-elf-hd-ribbon.png)
+![Night Elf console with foliage borders and green session ribbon](docs/screenshots/night-elf-theme-borders.png)
 
-*The Night Elf screenshot uses a client with HD world visuals; those world graphics are not included. Some screenshots show other addons that are not bundled.*
+*The four theme screenshots show the same Night Elf character switching console styles. Character race does not restrict your theme choice. Client world visuals and other addons visible in screenshots are not bundled.*
+
+### Stats and status at a glance
+
+![Character panel showing weapon damage, equipped armor, melee DPS, combat DPS, and numeric health and mana](docs/screenshots/character-panel-stats.png)
+
+Choose the four stats under your level bar and show health and resources as numbers, percentages, both, or neither.
+
+![Styled PvP-on and idle indicators with icons](docs/screenshots/pvp-combat-indicators.png)
+
+PvP and combat indicators can use icons, text, or both, with configurable styling and visibility.
 
 ### A character sheet worthy of a Warcraft III hero
 
