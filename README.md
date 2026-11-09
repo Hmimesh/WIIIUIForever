@@ -1,65 +1,80 @@
 # WIIIUI Forever
 
-**A Warcraft III-inspired UI reimagined for World of Warcraft: Forever.**
+### Bring the Warcraft III command console into World of Warcraft: Forever.
 
-**Alpha · v0.6.4 · Forever 1.60.1 / Interface 16001 · Lua · No required addons**
+**Four faction-inspired interfaces. Animated character portraits. A customizable HUD. One familiar Warcraft III feeling.**
 
-WIIIUI Forever brings Warcraft III's faction consoles into WoW Forever, with animated portraits, configurable character information, a Forsaken Kingdom-style character sheet, quick slots, and a session ribbon with a day/night clock.
+[![Version](https://img.shields.io/badge/version-0.6.4%20alpha-orange)](https://github.com/Hmimesh/WIIIUIForever)
+[![Client](https://img.shields.io/badge/client-WoW%20Forever-blue)](https://github.com/Hmimesh/WIIIUIForever)
+[![Interface](https://img.shields.io/badge/interface-16001-informational)](https://github.com/Hmimesh/WIIIUIForever)
+[![Issues](https://img.shields.io/github/issues/Hmimesh/WIIIUIForever)](https://github.com/Hmimesh/WIIIUIForever/issues)
 
-This project grows out of [Fiurs-Hearth's original WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI). Huge thanks and respect to **Fiur** for creating the original addon and sharing the foundation that made this possible!
+WIIIUI Forever reimagines [Fiur's original WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI) for the **WoW Forever** client. It frames WoW's native controls in Warcraft III-inspired faction consoles, adds practical customization, and gives your character screen a classic strategy-game look.
 
-This is a **reimagining for Forever**, with a different implementation and feature set. Many features and customization options from the original WIIIUI are not currently included here, and this version adds features of its own. The original addon's instructions and dependencies do not all apply to this version.
+> **Alpha — v0.6.4.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested.
 
-> **We're in alpha!** Expect rough edges as we test more characters, classes, resolutions, and addon combinations. Contributions, ideas, screenshots, and bug reports are very welcome. [Report an issue](https://github.com/Hmimesh/WIIIUIForever/issues) or [open a pull request](https://github.com/Hmimesh/WIIIUIForever/pulls).
+<p align="center">
+  <img src="docs/screenshots/orc-theme-with-pet.png" alt="Orc console with animated portrait and pet frame" width="49%">
+  <img src="docs/screenshots/undead-theme.png" alt="Undead console with six-slot quick panel" width="49%">
+</p>
 
-## Screenshots
+**[Install](#installation)** · **[Features](#features-at-a-glance)** · **[Customization guide](docs/CONFIGURATION.md)** · **[Report a bug](https://github.com/Hmimesh/WIIIUIForever/issues)**
 
-### Undead
+## Features at a glance
 
-The Undead console, animated portrait, optional six-slot inventory panel, and session ribbon.
+| Feature | What it brings |
+| --- | --- |
+| **Four faction themes** | Human, Orc, Undead, and Night Elf Warcraft III-style consoles. |
+| **Animated portrait** | Character portrait with per-character camera positioning and reset controls. |
+| **Native WoW controls** | Action bars, chat, and minimap arranged in the console; a separate Edit Mode layout preserves your previous arrangement. |
+| **Custom stat display** | Four selectable slots for damage, armor, ammo, DPS, crit, spell/healing details, rested XP, and more. |
+| **Six quick slots** | An optional item/spell panel that remembers assignments when hidden. |
+| **Restyled XP bar** | Level progress, rested segment, and hover details. |
+| **Session ribbon** | XP/hour, gold earned, gold/hour, session length, time-to-level estimate, and more, plus an optional day/night clock. |
+| **Character and inventory windows** | Forsaken Kingdom-inspired character sheet and movable bag panel. |
+| **Combat and PvP indicators** | Configurable indicator styles and visibility; combat statistics use Forever's native damage meter. |
 
-![Undead theme with animated portrait, quick slots, and session ribbon](docs/screenshots/undead-theme.png)
+No required companion addons. No MoveAnything or original WIIIUI installation needed.
 
-### Forsaken Kingdom-style character sheet
+## See it in action
 
-A Warcraft III-inspired character window with equipment, stats, and a separate movable inventory panel. Choose all carried bags, the backpack, an individual bag, or hide the inventory panel.
+### The four faction consoles
 
-![Forsaken Kingdom-style character sheet and all carried bags](docs/screenshots/forsaken-character-sheet.png)
-
-### Options through the cog
-
-Choose your theme, character stats, PvP/combat indicators, ribbon, health/resource text, portrait framing, quick slots, and character inventory from the cog above chat.
-
-![WIIIUI Forever cog options menu](docs/screenshots/cog-options.png)
-
-### Orc with a pet
-
-The Orc console with a pet frame and configurable equipment-aware stats, including ammo and weapon DPS.
+**Orc — with a pet and equipment-aware stats**
 
 ![Orc theme with pet frame, ammo, and melee DPS](docs/screenshots/orc-theme-with-pet.png)
 
-### Human starter layout
+**Undead — animated portrait, quick slots, and session ribbon**
 
-A fresh character using one action bar with the optional six quick slots hidden. Enable additional action bars in WoW's settings as you need them.
+![Undead theme with quick slots and session ribbon](docs/screenshots/undead-theme.png)
 
-![Human starter layout with one action bar and quick slots hidden](docs/screenshots/human-starter-layout.png)
+**Human — starter layout and day/night ribbon**
 
-The Human theme with its session ribbon and day/night clock:
+![Human starter layout](docs/screenshots/human-starter-layout.png)
+![Human theme with session ribbon in Northshire](docs/screenshots/human-session-ribbon.png)
 
-![Human theme and session ribbon in Northshire](docs/screenshots/human-session-ribbon.png)
+**Night Elf — faction console and ribbon**
 
-### Night Elf with ribbon and HD visuals
+![Night Elf theme with ribbon](docs/screenshots/night-elf-hd-ribbon.png)
 
-The Night Elf console and matching ribbon, shown on a client using HD visuals. HD world graphics are not supplied by this addon.
+*The Night Elf screenshot uses a client with HD world visuals; those world graphics are not included. Some screenshots show other addons that are not bundled.*
 
-![Night Elf theme with session ribbon on a client using HD visuals](docs/screenshots/night-elf-hd-ribbon.png)
+### A character sheet worthy of a Warcraft III hero
 
-Some screenshots also show other installed addons; those are not bundled with WIIIUI Forever.
+![Forsaken Kingdom-style character sheet and carried bags](docs/screenshots/forsaken-character-sheet.png)
 
-## Install
+Move the character sheet and inventory separately. Display all carried bags, the backpack, an individual bag, or no inventory panel.
 
-1. Download this repository using **Code → Download ZIP**, then extract it.
-2. Copy the inner **`WIIIUIForever`** folder into your Forever client's AddOns directory:
+### Make it your own
+
+![WIIIUI Forever cog configuration menu](docs/screenshots/cog-options.png)
+
+Use the **cog above chat** to adjust themes, stat slots, portrait framing, health/resource text, PvP indicators, quick slots, inventory, and the session ribbon. Detailed controls are in the [configuration guide](docs/CONFIGURATION.md).
+
+## Installation
+
+1. Click **Code → Download ZIP** on this repository and extract the archive.
+2. From the extracted repository, copy **only the inner `WIIIUIForever` folder** into your Forever client's addon directory:
 
    ```text
    World of Warcraft/
@@ -69,31 +84,16 @@ Some screenshots also show other installed addons; those are not bundled with WI
                └── WIIIUIForever/
                    ├── WIIIUIForever.toc
                    ├── WIIIUIForever.lua
+                   ├── Art.lua
                    └── art/
    ```
 
-3. Restart the client if it was already running, and enable **WIIIUI Forever** in the AddOn list.
-4. Open the **cog above chat** to configure the UI. The Human theme is the default.
+3. Restart the game if needed, and enable **WIIIUI Forever** in the AddOn list.
+4. Open the **cog above chat** to configure your interface. **Human** is the default theme.
 
-Install the `WIIIUIForever` folder itself, rather than the entire downloaded repository. This build targets **WoW Forever**; compatibility with other WoW clients has not been established. You do not need MoveAnything or the original WIIIUI installed.
+**Important:** Don't copy the whole downloaded repository into `AddOns`; the folder containing `WIIIUIForever.toc` should sit directly inside `AddOns`.
 
-## What you can customize
-
-- **Four faction themes:** Human, Orc, Undead, and Night Elf.
-- **Native action buttons, minimap, and chat:** arranged within a Warcraft III-style console. A separate **WIIIUI Forever Bars** Edit Mode layout keeps the previous layout available.
-- **Animated portrait:** per-character X/Y/Z controls, camera lock, reapply, and reset options.
-- **Health and resource text:** numbers, percentage, both, or none, chosen independently for health and mana/rage/energy/other resources.
-- **Four character stat slots:** choose weapon damage, armor, ammo, weapon DPS, crit, spell/healing information, rested XP, combat DPS, or highest-damage ability. Equipment-related stats use equipped item icons where supported.
-- **Combat information:** current-fight DPS and leading ability DPS from Forever's native damage meter, resetting for each combat session.
-- **XP and rested XP:** a styled level bar with a rested segment and hover details.
-- **PvP and combat indicators:** icon, text, both, or hidden; choose Warcraft/simple frames and whether inactive indicators remain visible.
-- **Six optional quick slots:** drag items or spells into the panel between the action bars and chat. Hide the panel without losing assignments.
-- **Forsaken character window:** movable character sheet and inventory panel, with selectable bag views.
-- **Session ribbon:** configurable XP/hour, gold gained, gold/hour, session time, estimated time to level, current money, rested XP, and other fields; optional faction backing and a Warcraft III day/night clock.
-
-See the [configuration guide](docs/CONFIGURATION.md) for controls, saved settings, and details.
-
-### Chat commands
+## Quick commands
 
 ```text
 /wiiiui human
@@ -104,24 +104,40 @@ See the [configuration guide](docs/CONFIGURATION.md) for controls, saved setting
 /wiiiui on
 ```
 
-`off` restores the native layout; `on` brings back the console. Make protected layout and quick-slot changes outside combat; changes that require it are deferred until combat ends.
+Switch to a faction theme using its name. `/wiiiui off` restores the native layout; `/wiiiui on` returns to the console.
 
-## Alpha testing and contributions
+Some layout and quick-slot updates are protected during combat and will apply when combat ends.
 
-We want this to work across more characters and setups, and we'd love your help. **Bug reports and contributions are very welcome!**
+## Customization details
 
-When reporting a problem, include:
+- **Portrait:** X/Y/Z framing, camera lock, reapply, and reset.
+- **Health and resources:** independent numeric, percentage, both, or hidden displays.
+- **Stats:** four slots for weapon damage, armor, ammo, weapon DPS, crit, spell/healing info, rested XP, current-fight DPS, or highest-damage ability. Equipment icons are shown where supported.
+- **Indicators:** PvP/combat icons, text, both, or hidden; Warcraft/simple frames and inactive visibility options.
+- **Quick slots:** drag items or spells to the optional six-slot panel; hiding it retains assignments.
+- **Ribbon:** select session metrics, optional faction backing, and Warcraft III day/night clock.
+- **Inventory:** choose combined bags, backpack, individual bag, or hide the separate inventory window.
 
-- Addon version and Forever client version.
-- Character race/class, selected theme, resolution, and UI scale.
-- What you did, what you expected, and what happened instead.
-- A screenshot and the first Lua error, if there is one.
-- Whether it happens after login, `/reload`, leveling, combat, or an equipment change, and which other UI addons are enabled.
+See **[CONFIGURATION.md](docs/CONFIGURATION.md)** for all settings and how they're saved.
 
-Portrait framing, reload/appearance transitions, and interactions with other UI addons are still being refined. Combat statistics depend on the native damage meter being available. See [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+## Alpha status and known limitations
 
-## Credits and upstream
+This project is actively evolving. Portrait framing, reload and appearance transitions, support across resolutions/UI scales, and compatibility with other UI addons are still being refined. Combat statistics require the native Forever damage meter.
 
-**Thank you, Fiur!** This project is a fork and Forever-specific reimagining of [Fiurs-Hearth/WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI). Please visit the original project and give its creator your support. The original faction console artwork comes from that project; additional Warcraft III artwork was converted from the locally installed game for the Forsaken panels, ribbon, clock, and indicators.
+**Found a bug or have an idea?** [Open an issue](https://github.com/Hmimesh/WIIIUIForever/issues) with:
 
-Warcraft, Warcraft III, and World of Warcraft artwork and trademarks belong to Blizzard Entertainment. See [CREDITS.md](CREDITS.md) for asset provenance. This is a community project, not an official Blizzard addon.
+- Addon version, Forever client version, character race/class, and selected theme.
+- Screen resolution, UI scale, and other enabled UI addons.
+- Steps to reproduce, expected result, and actual result.
+- A screenshot and the first Lua error (if any).
+- Whether it happens after login, `/reload`, leveling, combat, or an equipment change.
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) or [open a pull request](https://github.com/Hmimesh/WIIIUIForever/pulls).
+
+## Credits and attribution
+
+WIIIUI Forever is a Forever-specific fork and reimagining of **[Fiurs-Hearth/WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI)**. Huge thanks to **Fiur** for the original addon and the faction console foundation. This project has a different implementation and feature set; instructions and dependencies from the upstream project do not necessarily apply.
+
+Original faction console artwork comes from upstream WIIIUI. Additional Warcraft III artwork was converted from a locally installed game for the Forsaken panels, ribbon, clock, and indicators. See [CREDITS.md](CREDITS.md) for asset provenance.
+
+Warcraft, Warcraft III, and World of Warcraft artwork and trademarks belong to Blizzard Entertainment. This is an unofficial community project, not affiliated with or endorsed by Blizzard.
