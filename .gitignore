@@ -10,6 +10,7 @@ __pycache__/
 /tools/*
 !/tools/convert-wc3-hud-assets.py
 !/tools/package-wiiiui.py
+!/tools/prepare-curseforge.py
 
 # Local game state, diagnostics, and credentials are never distributed.
 WTF/

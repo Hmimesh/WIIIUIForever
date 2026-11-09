@@ -6,6 +6,10 @@ WIIIUI Forever is a Forever-specific fork and reimagining of **[WIIIUI by Fiurs-
 
 Thank you to Fiur for creating and sharing the original Warcraft III-style interface. The repository retains the upstream Git history. Our Forever implementation lives in `WIIIUIForever/` and has its own feature set and configuration.
 
+## Other forks
+
+Other projects take their own approach to the original addon, including [Warcraft 3 UI: Forever Edition](https://www.curseforge.com/wow/addons/warcraft-3-ui-forever-edition) by Infinityaddons. WIIIUI Forever is an optional sidegrade with its own features and layout; players can choose the version they prefer.
+
 ## Artwork provenance
 
 - The Human, Orc, Undead, and Night Elf console texture sheets and shared console art were adapted from the original WIIIUI project's `art/` directory.
@@ -15,4 +19,4 @@ Thank you to Fiur for creating and sharing the original Warcraft III-style inter
 - The addon-list icon (`WIIIUIForever/art/icon.tga`, with a PNG in `docs/images/`) was generated with the built-in imagegen tool using the maintainer's Warcraft III icon reference and custom UI lettering. It is not an icon extracted from the game. See [the icon design prompt](docs/ICON.md).
 - The screenshots in `docs/screenshots/` were supplied by this project's maintainer. They illustrate the alpha addon in game; other addons and client graphics modifications visible in them are not bundled here.
 
-Warcraft, Warcraft III, World of Warcraft, their artwork, and their trademarks belong to Blizzard Entertainment. Attribution here does not relicense Blizzard artwork or upstream material. No blanket license grant over those assets is made by this repository.
+Original implementation work by Hmimesh is covered by the scoped [MIT License](LICENSE.md). Warcraft, Warcraft III, World of Warcraft, their artwork, and their trademarks belong to Blizzard Entertainment. Attribution here does not relicense Blizzard artwork or upstream material. No blanket license grant over those assets is made by this repository.

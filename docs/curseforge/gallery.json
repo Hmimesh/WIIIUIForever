@@ -1,0 +1,11 @@
+[
+  {"file":"../screenshots/night-elf-theme-borders.png","title":"Night Elf console","caption":"Foliage borders, animated portrait, quick slots, and green session ribbon. The character remains a Night Elf while changing console styles."},
+  {"file":"../screenshots/undead-theme-borders.png","title":"Undead console","caption":"Bone borders, six quick slots, and the session ribbon."},
+  {"file":"../screenshots/orc-theme-borders.png","title":"Orc console","caption":"Wood and metal borders with the original spiked chat ornament."},
+  {"file":"../screenshots/human-theme-borders.png","title":"Human console","caption":"Stone borders, blue status indicators, quick slots, and the day/night ribbon."},
+  {"file":"../screenshots/character-panel-stats.png","title":"Choose your character stats","caption":"Weapon damage, equipped armor icon, melee DPS, combat DPS, and numeric health and mana with percentages."},
+  {"file":"../screenshots/pvp-combat-indicators.png","title":"PvP and combat indicators","caption":"PvP enabled and idle state, using icon and text indicators."},
+  {"file":"../screenshots/forsaken-character-sheet.png","title":"Forsaken Kingdom-style character window","caption":"Optional character sheet and all-carried-bags panel. Earlier alpha screenshot; other visible addons are not included."},
+  {"file":"../screenshots/cog-options.png","title":"Cog configuration menu","caption":"Theme, character panel, indicators, ribbon, portrait, quick-slot, and inventory options. Earlier alpha screenshot."},
+  {"file":"../screenshots/orc-theme-with-pet.png","title":"Orc console with a pet","caption":"Pet frame and equipment-aware stats on a hunter. Earlier alpha screenshot; borders predate the current update."}
+]

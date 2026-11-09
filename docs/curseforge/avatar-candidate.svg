@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <title>WIIIUI Forever — original geometric UI monogram</title>
+  <desc>A gold UI monogram on a dark teal console, with three small gold pillars. No game artwork or official Warcraft emblem is used.</desc>
+  <rect width="400" height="400" fill="#0c1316"/>
+  <path d="M28 12H372L388 28V372L372 388H28L12 372V28Z" fill="#644d2f"/>
+  <path d="M30 17H370L383 30V370L370 383H30L17 370V30Z" fill="#b89b61"/>
+  <path d="M34 24H366L376 34V366L366 376H34L24 366V34Z" fill="#142a2e"/>
+  <rect x="36" y="36" width="328" height="328" rx="2" fill="#0d1d21" stroke="#39616a" stroke-width="2"/>
+  <path d="M52 91H348M52 323H348" stroke="#3c5554" stroke-width="2"/>
+  <g fill="#a7b5ab"><circle cx="31" cy="31" r="4"/><circle cx="369" cy="31" r="4"/><circle cx="31" cy="369" r="4"/><circle cx="369" cy="369" r="4"/></g>
+  <g fill="#9d8954"><path d="M171 53H180V77H171Z"/><path d="M195 53H204V77H195Z"/><path d="M219 53H228V77H219Z"/></g>
+  <path d="M82 112H124V246L142 264H177L195 246V112H237V259L195 306H122L82 259Z M260 112H328V130H315V288H328V306H260V288H273V130H260Z" fill="#050a0c" stroke="#050a0c" stroke-width="10" transform="translate(0 5)"/>
+  <path d="M82 112H124V246L142 264H177L195 246V112H237V259L195 306H122L82 259Z M260 112H328V130H315V288H328V306H260V288H273V130H260Z" fill="#c7a45f" stroke="#e6cb89" stroke-width="2"/>
+  <path d="M88 118H118V249L140 270H179L201 249V118H231M266 118H322M279 136V283M266 300H322" fill="none" stroke="#f4dfa7" stroke-width="3"/>
+  <text x="200" y="352" text-anchor="middle" font-family="Georgia,serif" font-size="20" font-weight="bold" letter-spacing="5" fill="#b9c8bf">FOREVER</text>
+</svg>

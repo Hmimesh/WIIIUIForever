@@ -11,7 +11,7 @@
 
 WIIIUI Forever reimagines [Fiur's original WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI) for the **WoW Forever** client. It frames WoW's native controls in Warcraft III-inspired faction consoles, adds practical customization, and gives your character screen a classic strategy-game look.
 
-> **Alpha — v0.6.13-alpha1.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
+> **Alpha — v0.6.13-alpha2.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
 
 This update refines the four faction borders, gives each theme its own chat-border textures, fits the XP bar inside the character panel, and aligns the six quick slots with their artwork. See the [changelog](WIIIUIForever/CHANGELOG.txt).
 
@@ -147,7 +147,11 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) or [open a pul
 
 ## Credits and attribution
 
+Original code is available under the [MIT License](LICENSE.md). Third-party artwork and upstream material keep their existing ownership and terms and are excluded from that license.
+
 WIIIUI Forever is a Forever-specific fork and reimagining of **[Fiurs-Hearth/WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI)**. Huge thanks to **Fiur** for the original addon and the faction console foundation. This project has a different implementation and feature set; instructions and dependencies from the upstream project do not necessarily apply.
+
+There are other forks and reimaginings of WIIIUI, including **[Warcraft 3 UI: Forever Edition](https://www.curseforge.com/wow/addons/warcraft-3-ui-forever-edition)** by Infinityaddons. WIIIUI Forever is an optional sidegrade for players who prefer this version's features and layout. Choose whichever version suits you.
 
 Original faction console artwork comes from upstream WIIIUI. Additional Warcraft III artwork was converted from a locally installed game for the Forsaken panels, ribbon, clock, and indicators. See [CREDITS.md](CREDITS.md) for asset provenance.
 

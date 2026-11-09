@@ -1,0 +1,38 @@
+{
+  "name": "WIIIUI Forever",
+  "suggestedSlug": "wiiiui-forever",
+  "slugAvailabilityChecked": false,
+  "summary": "A customizable Warcraft III-style console with four faction themes, animated portraits, character stats, quick slots, and a session ribbon.",
+  "game": "World of Warcraft",
+  "class": "Addons",
+  "mainCategory": "HUDs",
+  "additionalCategories": ["Artwork", "Action Bars", "Unit Frames", "Bags & Inventory"],
+  "flavor": "Forever",
+  "gameVersions": ["1.60.1"],
+  "interface": 16001,
+  "fileDisplayName": "WIIIUI Forever 0.6.13-alpha2",
+  "fileName": "WIIIUIForever-0.6.13-alpha2.zip",
+  "releaseType": "Alpha",
+  "sourceCommit": "HEAD",
+  "sourceUrl": "https://github.com/Hmimesh/WIIIUIForever",
+  "issuesUrl": "https://github.com/Hmimesh/WIIIUIForever/issues",
+  "descriptionFile": "DESCRIPTION.md",
+  "changelogFile": "CHANGELOG.md",
+  "requiredDependencies": [],
+  "license": "MIT License",
+  "licenseStatus": "Selected by maintainer for original code; third-party artwork and upstream material are excluded. See LICENSE.md and packaged LICENSE.txt.",
+  "upstream": {
+    "name": "WIIIUI",
+    "author": "Fiur / Fiurs-Hearth",
+    "sourceUrl": "https://github.com/Fiurs-Hearth/WIIIUI",
+    "curseForgeUrl": "https://www.curseforge.com/wow/addons/wiiiui",
+    "listedLicense": "All Rights Reserved",
+    "permissionEvidence": null
+  },
+  "alternativeProjects": [
+    {"name": "Warcraft 3 UI: Forever Edition", "author": "Infinityaddons", "url": "https://www.curseforge.com/wow/addons/warcraft-3-ui-forever-edition"}
+  ],
+  "projectAvatar": "avatar-candidate.png",
+  "projectAvatarStatus": "Original geometric UI monogram candidate; maintainer review pending. Does not change the in-game addon icon.",
+  "submissionStatus": "Prepared locally; not created or uploaded on CurseForge"
+}
