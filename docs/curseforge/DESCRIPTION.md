@@ -61,6 +61,6 @@ There are other forks and reimaginings of the original addon, including **[Warcr
 
 Warcraft artwork and trademarks belong to Blizzard Entertainment. This is an unofficial community project, not affiliated with or endorsed by Blizzard. See the project's [artwork credits](https://github.com/Hmimesh/WIIIUIForever/blob/main/CREDITS.md).
 
-Original code is licensed under the [MIT License](https://github.com/Hmimesh/WIIIUIForever/blob/main/LICENSE.md). Third-party artwork and upstream material are excluded and retain their existing ownership and terms.
+Original code is licensed under the [CC BY 4.0](https://github.com/Hmimesh/WIIIUIForever/blob/main/LICENSE.md). Third-party artwork and upstream material are excluded and retain their existing ownership and terms.
 
 [Source and contribution guide](https://github.com/Hmimesh/WIIIUIForever) · [Bug reports and feature requests](https://github.com/Hmimesh/WIIIUIForever/issues) · [Configuration guide](https://github.com/Hmimesh/WIIIUIForever/blob/main/docs/CONFIGURATION.md)

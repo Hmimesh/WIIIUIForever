@@ -19,7 +19,7 @@
   "descriptionFile": "DESCRIPTION.md",
   "changelogFile": "CHANGELOG.md",
   "requiredDependencies": [],
-  "license": "MIT License",
+  "license": "CC BY 4.0",
   "licenseStatus": "Selected by maintainer for original code; third-party artwork and upstream material are excluded. See LICENSE.md and packaged LICENSE.txt.",
   "upstream": {
     "name": "WIIIUI",

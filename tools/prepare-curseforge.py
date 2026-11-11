@@ -66,7 +66,7 @@ def prepare():
         "Use DESCRIPTION.md, CHANGELOG.md, project.json and gallery.json for listing fields.\n"
         "The 400x400 avatar is a candidate for maintainer review. The in-game icon is unchanged.\n"
         "Release type: Alpha. Flavor: Forever. Game version: 1.60.1.\n"
-        "License: MIT for original code only; third-party artwork and upstream material are excluded.\n"
+        "License: CC BY 4.0 for original code only; third-party artwork and upstream material are excluded.\n"
         "Do not upload this entire review folder as an addon.\n"
         "Nothing in this kit creates a project, sends a message, or uploads a file.\n",
         encoding="utf-8",
@@ -82,7 +82,7 @@ def prepare():
         if hashlib.sha256((output / entry["path"]).read_bytes()).hexdigest() != entry["sha256"]:
             raise ValueError(f'Kit copy mismatch: {entry["path"]}')
     print(f"Verified review kit: {output} ({len(files)} files plus manifest)")
-    print("MIT selected for original code; project avatar review remains pending. No upload performed.")
+    print("CC BY 4.0 selected for original code; project avatar review remains pending. No upload performed.")
     return output
 
 

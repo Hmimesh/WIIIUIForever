@@ -1,5 +1,5 @@
 0.6.13-alpha2
-- Include the MIT license for original addon code; third-party artwork is excluded.
+- Include the CC BY 4.0 license for original addon code; third-party artwork is excluded.
 - Prepare the alpha listing, gallery, and separate project avatar candidate.
 - Document this reimagining as an optional sidegrade and link another Forever fork.
 - No functional Lua or in-game artwork changes from 0.6.13-alpha1.

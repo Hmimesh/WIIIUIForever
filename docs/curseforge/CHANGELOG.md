@@ -1,6 +1,6 @@
 # 0.6.13-alpha2 — CurseForge preparation
 
-- Include the MIT license for original addon code, with third-party artwork explicitly excluded.
+- Include the CC BY 4.0 license for original addon code, with third-party artwork explicitly excluded.
 - Add updated gallery images, listing copy, and a separate project avatar candidate.
 - Describe the project as an optional sidegrade and link Warcraft 3 UI: Forever Edition.
 - No functional Lua or texture changes from alpha1.

@@ -18,7 +18,7 @@ The ZIP contains only the installable `WIIIUIForever/` directory, including `WII
 
 ## Decisions before submission
 
-1. **Project license selected:** MIT for original code, as requested by the maintainer. Scope and exclusions are in `../../LICENSE.md` and the packaged `LICENSE.txt`. Third-party assets are not relicensed. The upstream [CurseForge listing](https://www.curseforge.com/wow/addons/wiiiui) displays All Rights Reserved; the upstream repository does not contain an explicit blanket license. Keep any rights evidence for submission review separately; the public description makes no personal-permission claims.
+1. **Project license selected:** CC BY 4.0 for original code, as requested by the maintainer. Scope and exclusions are in `../../LICENSE.md` and the packaged `LICENSE.txt`. Third-party assets are not relicensed. The upstream [CurseForge listing](https://www.curseforge.com/wow/addons/wiiiui) displays All Rights Reserved; the upstream repository does not contain an explicit blanket license. Keep any rights evidence for submission review separately; the public description makes no personal-permission claims.
 2. **Artwork:** the package contains upstream console artwork and converted Warcraft III artwork. Do not apply a new open-source license to third-party assets by assumption. Their ownership is already described in `CREDITS.md`.
 3. **Positioning:** public copy links both Fiur's original and Infinityaddons' Forever Edition, and describes this project as an optional sidegrade. It makes no claims about the other fork's relative quality or licensing.
 4. **Avatar:** review the original geometric UI monogram candidate. It uses no game texture or official Warcraft emblem. The existing in-game W/III/UI icon is unchanged. This candidate avoids reusing the official-style W as the project avatar; moderator acceptance is not guaranteed.
@@ -29,7 +29,7 @@ The ZIP contains only the installable `WIIIUIForever/` directory, including `WII
 1. Open the [CurseForge author portal](https://authors.curseforge.com/#/projects/create/choose-game).
 2. Select World of Warcraft, class Addons, main category HUDs. Suggested additional categories are Artwork, Action Bars, Unit Frames, and Bags & Inventory.
 3. Use the summary in `project.json`, the reviewed avatar, and `DESCRIPTION.md`. Do not copy the original WIIIUI description. Source and issue links point to this fork.
-4. Select MIT for original code, retaining the explicit third-party exclusions in the description and packaged license.
+4. Select CC BY 4.0 for original code, retaining the explicit third-party exclusions in the description and packaged license.
 5. Upload gallery images in `gallery.json`; they are actual maintainer-supplied screenshots. Retain the caveat about other addons/world visuals.
 6. Upload **only** `WIIIUIForever-0.6.13-alpha2.zip` as the addon file. Do not upload the entire repository or the submission kit.
 7. File display name: WIIIUI Forever 0.6.13-alpha2. Choose **Forever / 1.60.1** and **Alpha**. Do not tag untested clients. No required dependencies are declared.

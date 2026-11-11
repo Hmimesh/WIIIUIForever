@@ -147,7 +147,7 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) or [open a pul
 
 ## Credits and attribution
 
-Original code is available under the [MIT License](LICENSE.md). Third-party artwork and upstream material keep their existing ownership and terms and are excluded from that license.
+Original code is available under the [CC BY 4.0](LICENSE.md). Third-party artwork and upstream material keep their existing ownership and terms and are excluded from that license.
 
 WIIIUI Forever is a Forever-specific fork and reimagining of **[Fiurs-Hearth/WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI)**. Huge thanks to **Fiur** for the original addon and the faction console foundation. This project has a different implementation and feature set; instructions and dependencies from the upstream project do not necessarily apply.
 
