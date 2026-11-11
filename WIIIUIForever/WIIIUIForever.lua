@@ -10,6 +10,7 @@ local mainSlotAnchors = {}
 local minimapIconHooks = {}
 local layoutQueued = false
 local layoutPending = false
+local layoutApplying = false
 local tooltipClamped
 local scale = 1
 local portraitZoom = 1
@@ -334,7 +335,7 @@ local function placeMicroMenu()
     place(MicroMenuContainer, addon.width - 7, 201, "BOTTOMRIGHT")
 end
 
-local function applyLayout()
+local function applyLayoutNow()
     if InCombatLockdown() then
         layoutPending = true
         return
@@ -400,6 +401,14 @@ local function applyLayout()
     end
 end
 
+local function applyLayout()
+    if layoutApplying then return end
+    layoutApplying = true
+    local ok, reason = pcall(applyLayoutNow)
+    layoutApplying = false
+    if not ok then error(reason, 0) end
+end
+
 queueLayout = function()
     if not console or not settings.enabled or layoutQueued then
         return
@@ -409,6 +418,18 @@ queueLayout = function()
         layoutQueued = false
         applyLayout()
     end)
+end
+
+local function restoreDockAfterNativeUpdate()
+    if layoutApplying or not console or not console:IsShown() or not settings.enabled then return end
+    if EditModeManagerFrame:IsEditModeActive() then return end
+    if EditModeManagerFrame.layoutApplyInProgress or InCombatLockdown() then
+        queueLayout()
+        return
+    end
+    -- Native layout updates can move the controls during a level-up. Dock
+    -- them again in the same frame so the default placement does not flash.
+    applyLayout()
 end
 
 local function applyPortraitOffsets(model)
@@ -708,6 +729,15 @@ local function selectTheme(theme)
     message(addon.themes[theme].label .. " theme selected.")
 end
 
+local function setEnabled(enabled)
+    settings.enabled = not not enabled
+    nativeLayoutRequested = settings.enabled
+    applyLayout()
+    if addon.RefreshCharacterSheet then
+        addon.RefreshCharacterSheet()
+    end
+end
+
 local function printThemes()
     message("Use /wiiiui human, orc, undead, or nightelf to select a theme. Use /wiiiui off or on to toggle the console.")
 end
@@ -831,21 +861,19 @@ local function initialize()
         if addon.themes[command] then
             selectTheme(command)
         elseif command == "off" or command == "on" then
-            settings.enabled = command == "on"
-            nativeLayoutRequested = settings.enabled
-            applyLayout()
-            if addon.RefreshCharacterSheet then
-                addon.RefreshCharacterSheet()
-            end
+            setEnabled(command == "on")
         else
             printThemes()
         end
     end
 
-    hooksecurefunc(EditModeManagerFrame, "UpdateBottomActionBarPositions", queueLayout)
-    hooksecurefunc(EditModeManagerFrame, "UpdateRightActionBarPositions", queueLayout)
+    hooksecurefunc(EditModeManagerFrame, "UpdateBottomActionBarPositions", restoreDockAfterNativeUpdate)
+    hooksecurefunc(EditModeManagerFrame, "UpdateRightActionBarPositions", restoreDockAfterNativeUpdate)
+    if type(EditModeManagerFrame.UpdateLayoutInfo) == "function" then
+        hooksecurefunc(EditModeManagerFrame, "UpdateLayoutInfo", restoreDockAfterNativeUpdate)
+    end
     hooksecurefunc(EditModeManagerFrame, "SetToLayoutAnchor", queueLayout)
-    hooksecurefunc(MainActionBar, "UpdateGridLayout", queueLayout)
+    hooksecurefunc(MainActionBar, "UpdateGridLayout", restoreDockAfterNativeUpdate)
     hooksecurefunc(MinimapCluster, "UpdateMinimapConfig", queueLayout)
     hooksecurefunc(MinimapCluster, "SetHeaderUnderneath", queueLayout)
     hooksecurefunc(MinimapCluster, "SetEditModeScale", queueLayout)
@@ -858,8 +886,8 @@ local function initialize()
             end
         end
     end
-    hooksecurefunc(MicroMenu, "ResetMicroMenuPosition", queueLayout)
-    hooksecurefunc(MicroMenuContainer, "Layout", queueLayout)
+    hooksecurefunc(MicroMenu, "ResetMicroMenuPosition", restoreDockAfterNativeUpdate)
+    hooksecurefunc(MicroMenuContainer, "Layout", restoreDockAfterNativeUpdate)
     for _, bar in ipairs({ MultiBarBottomLeft, MultiBarBottomRight }) do
         bar:HookScript("OnShow", updateOptionalRows)
         bar:HookScript("OnHide", updateOptionalRows)
@@ -873,6 +901,7 @@ local function initialize()
     addon.UpdateProfile(console)
     addon.UpdatePlayerStatus(console)
     queueLayout()
+    addon.RegisterSettings(settings, setEnabled, selectTheme)
 end
 
 events:RegisterEvent("PLAYER_LOGIN")
@@ -980,6 +1009,7 @@ events:SetScript("OnEvent", function(_, event, ...)
                 applyPortraitOffsets(console.portraitModel)
             end
             addon.UpdateProfile(console)
+            if event == "PLAYER_LEVEL_CHANGED" then restoreDockAfterNativeUpdate() end
             return
         elseif event == "PLAYER_ENTERING_WORLD" then
             updatePortrait()

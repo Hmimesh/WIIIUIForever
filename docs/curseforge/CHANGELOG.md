@@ -3,7 +3,9 @@
 - Include the CC BY 4.0 license for original addon code, with third-party artwork explicitly excluded.
 - Add updated gallery images, listing copy, and a separate project avatar candidate.
 - Describe the project as an optional sidegrade and link Warcraft 3 UI: Forever Edition.
-- No functional Lua or texture changes from alpha1.
+- Add a bug-report icon in Settings that opens a copyable GitHub issue link.
+- Show current and required XP when hovering over the level bar.
+- Keep the console docked during level-up and share the saved Edit Mode layout across characters.
 
 # 0.6.13-alpha1 — fixed borders
 

@@ -73,33 +73,33 @@ function addon.EnableNativeLayout(character)
     if not current then
         return nil
     end
-    local characterType = Enum.EditModeLayoutType.Character
-    local existing = findLayout(info, layoutName, characterType)
-    if not existing and EditModeManagerFrame:AreLayoutsOfTypeMaxed(characterType) then
-        return false, "Free a character layout slot in Edit Mode, then run /wiiiui on to lock the bars in place."
-    end
-
-    if existing ~= info.activeLayout then
+    local types = Enum.EditModeLayoutType
+    local shared = findLayout(info, layoutName, types.Account)
+    local legacy = findLayout(info, layoutName, types.Character)
+    -- An older addon layout is already carrying the character's original
+    -- layout reference. Keep it while moving to the account layout.
+    if info.activeLayout ~= shared and info.activeLayout ~= legacy then
         character.previousLayoutName = current.layoutName
         character.previousLayoutType = current.layoutType
     end
-    if existing then
-        if not character.dockAnchorsSaved then
-            if not setDockAnchors(info.layouts[existing]) then
-                return nil
-            end
-            C_EditMode.SaveLayouts(info)
-            character.dockAnchorsSaved = true
-        end
-        if existing ~= info.activeLayout then
-            C_EditMode.SetActiveLayout(existing)
+    if shared then
+        if shared ~= info.activeLayout then
+            C_EditMode.SetActiveLayout(shared)
         end
         return true
     end
+    if EditModeManagerFrame:AreLayoutsOfTypeMaxed(types.Account) then
+        if legacy and legacy ~= info.activeLayout then
+            C_EditMode.SetActiveLayout(legacy)
+        end
+        return legacy ~= nil, "Free an account layout slot in Edit Mode, then run /wiiiui on to share the layout across characters."
+    end
 
-    local layout = CopyTable(current)
+    -- Copy the complete saved layout so systems outside the console, such
+    -- as the objective tracker and swing timer, retain their native settings.
+    local layout = CopyTable(current.layoutType == types.Preset and legacy and info.layouts[legacy] or current)
     layout.layoutName = layoutName
-    layout.layoutType = characterType
+    layout.layoutType = types.Account
     if not setAnchor(layout, MainActionBar, true) then
         return nil
     end
@@ -116,18 +116,24 @@ function addon.EnableNativeLayout(character)
         return nil
     end
 
+    -- Blizzard indexes presets first, then account layouts, then character layouts.
     local index = #info.layouts + 1
-    info.layouts[index] = layout
+    for candidate, saved in ipairs(info.layouts) do
+        if saved.layoutType == types.Character then
+            index = candidate
+            break
+        end
+    end
+    table.insert(info.layouts, index, layout)
     C_EditMode.SaveLayouts(info)
     C_EditMode.OnLayoutAdded(index, true, false)
-    character.dockAnchorsSaved = true
-    return true, "Created the WIIIUI Forever Bars character layout in Edit Mode."
+    return true, "Created the account-wide WIIIUI Forever Bars layout in Edit Mode."
 end
 
 function addon.DisableNativeLayout(character)
     local info = getLayouts()
     local active = info.layouts[info.activeLayout]
-    if active and active.layoutName == layoutName and active.layoutType == Enum.EditModeLayoutType.Character then
+    if active and active.layoutName == layoutName and active.layoutType ~= Enum.EditModeLayoutType.Preset then
         local previous = findLayout(info, character.previousLayoutName, character.previousLayoutType)
         C_EditMode.SetActiveLayout(previous or 1)
     end

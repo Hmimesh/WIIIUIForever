@@ -212,6 +212,26 @@ local function experienceTooltip(xp)
     GameTooltip:Show()
 end
 
+local function fadeExperienceText(xp, elapsed)
+    local blend, target = xp.labelBlend, xp.labelTarget
+    local step = elapsed / 0.16
+    blend = target > blend and math.min(blend + step, target) or math.max(blend - step, target)
+    xp.labelBlend = blend
+    xp.levelLabel:SetAlpha(1 - blend)
+    xp.valueLabel:SetAlpha(blend)
+    if blend == target then
+        xp:SetScript("OnUpdate", nil)
+    end
+end
+
+local function updateExperienceText(xp)
+    local target = xp.hovering and xp.hasExperience and 1 or 0
+    if target ~= xp.labelTarget then
+        xp.labelTarget = target
+        xp:SetScript("OnUpdate", xp.labelBlend ~= target and fadeExperienceText or nil)
+    end
+end
+
 function addon.CreateProfile(console, character)
     local function text(parent, x, y, width, font, alignment)
         local label = parent:CreateFontString(nil, "OVERLAY", font)
@@ -246,14 +266,32 @@ function addon.CreateProfile(console, character)
     rested:Hide()
     xp.rested = rested
     xp:EnableMouse(true)
-    xp:SetScript("OnEnter", experienceTooltip)
+    xp:SetScript("OnEnter", function(self)
+        self.hovering = true
+        updateExperienceText(self)
+        experienceTooltip(self)
+    end)
     xp:SetScript("OnLeave", function(self)
+        self.hovering = false
+        updateExperienceText(self)
+        if GameTooltip:GetOwner() == self then
+            GameTooltip:Hide()
+        end
+    end)
+    xp:SetScript("OnHide", function(self)
+        self.hovering = false
+        self.labelBlend, self.labelTarget = 0, 0
+        fadeExperienceText(self, 0)
         if GameTooltip:GetOwner() == self then
             GameTooltip:Hide()
         end
     end)
     console.xp = xp
     console.level = text(xp, 0, 0, 170, "GameFontHighlightSmall", "CENTER")
+    xp.levelLabel = console.level
+    xp.valueLabel = text(xp, 0, 0, 170, "GameFontHighlightSmall", "CENTER")
+    xp.valueLabel:SetAlpha(0)
+    xp.labelBlend, xp.labelTarget = 0, 0
 
     character.profileStats = type(character.profileStats) == "table" and character.profileStats or {}
     console.profileStats = character.profileStats
@@ -357,6 +395,11 @@ end
 function addon.UpdateExperience(console)
     local current, maximum, rested = UnitXP("player"), UnitXPMax("player"), restedExperience()
     local xp = console.xp
+    xp.hasExperience = readableNumber(current) and readableNumber(maximum) and maximum > 0
+    if xp.hasExperience then
+        xp.valueLabel:SetFormattedText("%d/%d XP", current, maximum)
+    end
+    updateExperienceText(xp)
     xp.rested:Hide()
     if readableNumber(current) and readableNumber(maximum) then
         xp:SetMinMaxValues(0, math.max(maximum, 1))

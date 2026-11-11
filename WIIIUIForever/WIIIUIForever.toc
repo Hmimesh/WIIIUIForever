@@ -15,4 +15,5 @@ SessionRibbon.lua
 QuickSlots.lua
 CharacterSheet.lua
 NativeLayout.lua
+BugReport.lua
 WIIIUIForever.lua

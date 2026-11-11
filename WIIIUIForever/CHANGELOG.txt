@@ -2,7 +2,9 @@
 - Include the CC BY 4.0 license for original addon code; third-party artwork is excluded.
 - Prepare the alpha listing, gallery, and separate project avatar candidate.
 - Document this reimagining as an optional sidegrade and link another Forever fork.
-- No functional Lua or in-game artwork changes from 0.6.13-alpha1.
+- Add a bug-report icon in Settings that opens a copyable GitHub issue link.
+- Fade from the level label to current and required XP on hover.
+- Keep the console docked during level-up and share the saved Edit Mode layout across characters.
 
 0.6.13-alpha1
 - Join the Human chat rail through two mortar gaps with one complete stone span.
