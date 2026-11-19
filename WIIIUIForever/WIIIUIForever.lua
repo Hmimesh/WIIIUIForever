@@ -6,11 +6,15 @@ local character
 local nativeLayoutRequested = true
 local original = {}
 local faded = {}
+local petFrameDetached = false
+local minionTrackerState
 local mainSlotAnchors = {}
 local minimapIconHooks = {}
+local enteredWorld = false
 local layoutQueued = false
 local layoutPending = false
 local layoutApplying = false
+local dockVisibility
 local tooltipClamped
 local scale = 1
 local portraitZoom = 1
@@ -65,6 +69,10 @@ local function restoreLayout()
     if not next(original) then
         return
     end
+    if minionTrackerState then
+        TotemFrame.ignoreFramePositionManager = minionTrackerState.ignoreFramePositionManager
+        TotemFrame:SetParent(minionTrackerState.parent)
+    end
     for frame, state in pairs(original) do
         frame:SetScale(state.scale)
         if state.width then
@@ -80,6 +88,15 @@ local function restoreLayout()
     end
     wipe(original)
     wipe(faded)
+    if minionTrackerState then
+        local container = minionTrackerState.container
+        minionTrackerState = nil
+        if container then container:AddManagedFrame(TotemFrame) end
+    end
+    if petFrameDetached then
+        petFrameDetached = false
+        PetFrame:ApplySystemAnchor()
+    end
     if tooltipClamped ~= nil then
         GameTooltip:SetClampedToScreen(tooltipClamped)
         tooltipClamped = nil
@@ -124,21 +141,28 @@ local function fit(frame, x, y, width, height, point)
 end
 
 local queueLayout
-local function placeMinimap()
+local function placeMinimap(dx)
     local cluster = MinimapCluster
     local map = cluster.MinimapContainer
-    local mapCenter = 79
+    local mapCenter = 79 + dx
     local mapWidth = Minimap:GetWidth() * Minimap:GetScale()
     if not map or mapWidth <= 0 then
         return
     end
     remember(cluster)
-    place(cluster, 0, 0)
+    place(cluster, dx, 0)
     -- The cluster resizes around its header on first login. Anchor the map's
     -- own container directly so a cluster resize cannot lift it out of the art.
     remember(map)
     setScale(map, scale * 137 / mapWidth)
     place(map, mapCenter, 76, "CENTER")
+    local coordinates = map.PlayerCoords
+    if coordinates then
+        -- Blizzard anchors this readout below the minimap, behind our bottom trim.
+        remember(coordinates)
+        local units = scale * UIParent:GetEffectiveScale() / coordinates:GetEffectiveScale()
+        anchor(coordinates, "BOTTOM", Minimap, "BOTTOM", 0, 8 * units)
+    end
     Minimap:SetMaskTexture(addon.artPath .. "other\\MinimapMask.blp")
     console.mapTrim:SetFrameLevel(Minimap:GetFrameLevel() + 1)
     fade(MinimapCompassTexture)
@@ -151,12 +175,12 @@ local function placeMinimap()
         remember(tracking)
         local buttonScale = math.min(18 / trackingButton:GetWidth(), 18 / trackingButton:GetHeight())
         setScale(tracking, scale * buttonScale / (trackingButton == tracking and 1 or trackingButton:GetScale()))
-        place(tracking, buttons.x, buttons[1], "CENTER")
+        place(tracking, buttons.x + dx, buttons[1], "CENTER")
     end
-    fit(GameTimeFrame, buttons.x, buttons[2], 18, 17, "CENTER")
-    fit(AddonCompartmentFrame, buttons.x, buttons[3], 18, 17, "CENTER")
-    fit(cluster.IndicatorFrame, buttons.x, buttons[4], 18, 15, "CENTER")
-    fit(cluster.DielFrame, buttons.x, buttons[5], 22, 22, "CENTER")
+    fit(GameTimeFrame, buttons.x + dx, buttons[2], 18, 17, "CENTER")
+    fit(AddonCompartmentFrame, buttons.x + dx, buttons[3], 18, 17, "CENTER")
+    fit(cluster.IndicatorFrame, buttons.x + dx, buttons[4], 18, 15, "CENTER")
+    fit(cluster.DielFrame, buttons.x + dx, buttons[5] + 5, 22, 22, "CENTER")
 
     local icons = {}
     for _, child in ipairs({ Minimap:GetChildren() }) do
@@ -185,9 +209,9 @@ local function placeMinimap()
     end
 end
 
-local function fitActionRow(bar, y)
+local function fitActionRow(bar, dx, y)
     local grid = addon.grid
-    local center = grid.x + grid.width / 2
+    local center = grid.x + dx + grid.width / 2
     local buttons = bar and bar.shownButtonContainers
     if buttons and #buttons == 12 and bar.isHorizontal and bar.numRows == 1 then
         local first, last = buttons[1], buttons[12]
@@ -215,10 +239,10 @@ local function fitActionRow(bar, y)
     fit(bar, center, y, grid.width - 2, grid.rowHeight - 1, "BOTTOM")
 end
 
-local function placeMainActionRow(bar)
+local function placeMainActionRow(bar, dx, dy)
     local buttons = bar.actionButtons
     if not buttons or #buttons ~= 12 or bar.numButtonsShowable ~= 12 or not bar.isHorizontal or bar.numRows ~= 1 then
-        fitActionRow(bar, 1)
+        fitActionRow(bar, dx, dy + 1)
         return
     end
 
@@ -226,7 +250,7 @@ local function placeMainActionRow(bar)
     local first = buttons[1].container
     local width, height = first:GetSize()
     if width <= 0 or height <= 0 then
-        fitActionRow(bar, 1)
+        fitActionRow(bar, dx, dy + 1)
         return
     end
 
@@ -234,7 +258,7 @@ local function placeMainActionRow(bar)
     local buttonScale = math.min((cellWidth - 2) / width, (grid.rowHeight - 2) / height) / first:GetScale()
     remember(bar)
     setScale(bar, scale * buttonScale)
-    place(bar, grid.x, 0)
+    place(bar, grid.x + dx, dy)
 
     -- Forever's compact main bar packs its buttons closer than bars 2 and 3.
     -- Keep each native button centered in the corresponding art cell.
@@ -245,7 +269,7 @@ local function placeMainActionRow(bar)
             slot:SetSize(1, 1)
             mainSlotAnchors[index] = slot
         end
-        place(slot, grid.x + (index - 0.5) * cellWidth, grid.rowHeight / 2, "CENTER")
+        place(slot, grid.x + dx + (index - 0.5) * cellWidth, dy + grid.rowHeight / 2, "CENTER")
         local container = button.container
         remember(container)
         -- The bar and its containers can have different scales. A zero-offset
@@ -254,12 +278,12 @@ local function placeMainActionRow(bar)
     end
 end
 
-local function placeTrackingBar(container, x, y)
+local function placeTrackingBar(container, x, y, themedExperience)
     if not container then
         return
     end
     local experience = StatusTrackingBarInfo and StatusTrackingBarInfo.BarsEnum.Experience
-    if experience and container.bars then
+    if themedExperience and experience and container.bars then
         fade(container.bars[experience])
         if container.shownBarIndex == experience then
             -- Keep the native animation running, including its dividers and
@@ -270,26 +294,27 @@ local function placeTrackingBar(container, x, y)
     fit(container, x, y, addon.grid.width, 11, "BOTTOM")
 end
 
-local function placeActionBars()
+local function placeActionBars(dx, dy, themedExperience, stockJoin)
     local grid = addon.grid
-    local center = grid.x + grid.width / 2
+    local x = grid.x + dx
+    local center = x + grid.width / 2
     if MainActionBar and not MainActionBar.attachedFrame then
-        placeMainActionRow(MainActionBar)
+        placeMainActionRow(MainActionBar, dx, dy)
         fade(MainActionBar.BorderArt)
         fade(MainActionBar.EndCaps)
         local page = MainActionBar.ActionBarPageNumber
         if page then
             remember(page)
-            place(page, 1032, 157, "CENTER")
+            place(page, stockJoin and 1032 + dx or x + grid.width - 12, dy + 157, "CENTER")
         end
     end
-    fitActionRow(MultiBarBottomLeft, grid.rowHeight + 1)
-    fitActionRow(MultiBarBottomRight, grid.rowHeight * 2 + 1)
-    placeTrackingBar(MainStatusTrackingBarContainer, center, 143)
-    placeTrackingBar(SecondaryStatusTrackingBarContainer, center, 155)
-    fit(PetActionBar, grid.x, 168, 300, 28)
-    fit(StanceBar, grid.x, 198, 300, 28)
-    fit(PlayerCastingBarFrame, center, 229, 186, 19, "BOTTOM")
+    fitActionRow(MultiBarBottomLeft, dx, dy + grid.rowHeight + 1)
+    fitActionRow(MultiBarBottomRight, dx, dy + grid.rowHeight * 2 + 1)
+    placeTrackingBar(MainStatusTrackingBarContainer, center, dy + 143, themedExperience)
+    placeTrackingBar(SecondaryStatusTrackingBarContainer, center, dy + 155, themedExperience)
+    fit(PetActionBar, x, dy + 192, 300, 28)
+    fit(StanceBar, x, dy + 226, 300, 28)
+    fit(PlayerCastingBarFrame, center, dy + 260, 186, 19, "BOTTOM")
 end
 
 local function placeSideBars(width, height)
@@ -305,7 +330,7 @@ local function placeSideBars(width, height)
     end
 end
 
-local function placeChat()
+local function placeChat(x, y)
     if not ChatFrame1 then
         return
     end
@@ -316,14 +341,14 @@ local function placeChat()
     if math.abs(ChatFrame1:GetWidth() - width) > 0.01 or math.abs(ChatFrame1:GetHeight() - height) > 0.01 then
         ChatFrame1:SetSize(width, height)
     end
-    place(ChatFrame1, chat.x + 17, 38)
+    place(ChatFrame1, x + 17, y + 38)
 end
 
 local function updateOptionalRows()
     console:SetOptionalRows(MultiBarBottomLeft:IsShown(), MultiBarBottomRight:IsShown())
 end
 
-local function placeMicroMenu()
+local function placeMicroMenu(x, y)
     if MicroMenu:GetParent() ~= MicroMenuContainer then
         return
     end
@@ -332,21 +357,52 @@ local function placeMicroMenu()
     if width > 1 and height > 1 then
         setScale(MicroMenuContainer, scale * math.min((addon.chat.width - 14) / width, 29 / height))
     end
-    place(MicroMenuContainer, addon.width - 7, 201, "BOTTOMRIGHT")
+    place(MicroMenuContainer, x - 7, y, "BOTTOMRIGHT")
+end
+
+local function placePetFrame(dx)
+    if not PetFrame then return end
+    -- The default pet frame is managed under PlayerFrame. The native manager
+    -- can move it below that frame again when pet or totem visibility changes.
+    if PetFrame.isManagedFrame and PetFrame.BreakFromFrameManager and PetFrame.ApplySystemAnchor
+        and PetFrame.IsInDefaultPosition and PetFrame:IsInDefaultPosition()
+        and not PetFrame.ignoreFramePositionManager then
+        remember(PetFrame)
+        PetFrame:BreakFromFrameManager()
+        petFrameDetached = true
+    end
+    fit(PetFrame, 216 + dx, 147, 136, 45)
+end
+
+local function placeMinionTracker(dx)
+    if not TotemFrame then return end
+    -- Summoned guardians (including the Hunter's hawk) use the native totem
+    -- tracker. Its player-frame manager would otherwise place it in the stats.
+    if not minionTrackerState then
+        remember(TotemFrame)
+        local container = TotemFrame.isManagedFrame and not TotemFrame.ignoreFramePositionManager
+            and GetPlayerBottomManagedFrameContainer and GetPlayerBottomManagedFrameContainer()
+        minionTrackerState = {
+            parent = TotemFrame:GetParent(),
+            ignoreFramePositionManager = TotemFrame.ignoreFramePositionManager,
+            container = container or nil,
+        }
+        TotemFrame.ignoreFramePositionManager = true
+        if container then container:RemoveManagedFrame(TotemFrame) end
+        TotemFrame:SetParent(UIParent)
+    end
+    -- Keep each circle the same size as guardians are added or expire.
+    setScale(TotemFrame, scale)
+    place(TotemFrame, 350 + dx, 147)
 end
 
 local function applyLayoutNow()
-    if InCombatLockdown() then
-        layoutPending = true
-        return
-    end
-    layoutPending = false
-
     if not settings.enabled or EditModeManagerFrame:IsEditModeActive() or InputUtil.IsGamepadUIEnabled()
         or (PlayerFrame and PlayerFrame.unit == "vehicle") then
-        quickSlots:Hide()
+        if quickSlots then quickSlots:Hide() end
         console:Hide()
         restoreLayout()
+        dockVisibility = nil
         if not settings.enabled and not InputUtil.IsGamepadUIEnabled() and EditModeManagerFrame:IsInitialized() then
             addon.DisableNativeLayout(character)
         end
@@ -356,29 +412,67 @@ local function applyLayoutNow()
     if width <= 0 or height <= 0 then
         return
     end
-    scale = math.min(width * 0.98 / addon.width, height / 900)
+    local dock, clearance, dockWidth = addon.GetDockLayout(character)
+    scale = math.min(width * 0.98 / math.max(dockWidth, addon.width), height / 900)
+    local visibility = (dock.map and 1 or 0) + (dock.character and 2 or 0)
+    if dockVisibility and dockVisibility ~= visibility then
+        -- Restore the previous mask, player-frame art and XP alpha before undocking.
+        restoreLayout()
+    end
+    dockVisibility = visibility
+    -- Creating the secure buttons also sets their anchors and attributes.
+    if not quickSlots then
+        quickSlots = addon.CreateQuickSlots(character)
+    end
     console:SetScale(scale)
+    console:SetDockLayout(dock)
     console:Show()
-    setScale(quickSlots, scale)
-    place(quickSlots, addon.quickSlots.x, 0)
-    local showQuickSlots = character.quickSlotsEnabled ~= false
-    console:SetQuickSlotsShown(showQuickSlots)
+    local showQuickSlots = dock.quick ~= nil and character.quickSlotsEnabled ~= false
+    console:SetQuickSlotsShown(character.quickSlotsEnabled ~= false)
     quickSlots:SetShown(showQuickSlots)
-    placeMinimap()
-    placeActionBars()
+    if showQuickSlots then
+        setScale(quickSlots, scale)
+        place(quickSlots, addon.quickSlots.x + dock.quick.dx, 0)
+    end
+    if dock.map then
+        placeMinimap(dock.map.dx)
+    else
+        remember(MinimapCluster)
+        anchor(MinimapCluster, "TOPRIGHT", UIParent, "TOPRIGHT", -12, -12)
+    end
+    -- Preserve the native controls when their Warcraft box is removed.
+    -- Standalone chat and bars sit above the remaining boxes in separate lanes.
+    local aboveDock = clearance > 0 and clearance + 7 or 0
+    local actionDX = dock.actions and dock.actions.dx or (addon.width - addon.grid.width) / 2 - addon.grid.x
+    local actionDY = dock.actions and 0 or aboveDock
+    placeActionBars(actionDX, actionDY, dock.character ~= nil, dock.actions and dock.actions.joinRight)
     updateOptionalRows()
     placeSideBars(width, height)
-    placeChat()
+    local chatX = dock.chat and addon.chat.x + dock.chat.dx or 0
+    placeChat(chatX, dock.chat and 0 or aboveDock)
     if PlayerFrame and PlayerFrame.unit == "player" then
-        -- Keep the native click target and pet frame while the console draws
-        -- the player's portrait, bars and character sheet.
-        fit(PlayerFrame, 210, 8, 289, 118)
-        fade(PlayerFrame.PlayerFrameContainer)
-        fade(PlayerFrame.PlayerFrameContent)
+        if dock.character then
+            -- Keep the native click target over the themed character box.
+            fit(PlayerFrame, 210 + dock.character.dx, 8, 289, 118)
+            fade(PlayerFrame.PlayerFrameContainer)
+            fade(PlayerFrame.PlayerFrameContent)
+            placePetFrame(dock.character.dx)
+            placeMinionTracker(dock.character.dx)
+        else
+            remember(PlayerFrame)
+            anchor(PlayerFrame, "TOPLEFT", UIParent, "TOPLEFT", 22, -25)
+            if PetFrame then
+                remember(PetFrame)
+                anchor(PetFrame, "TOPLEFT", PlayerFrame, "BOTTOMLEFT", 24, 0)
+            end
+        end
     end
-    fit(PetFrame, 216, 147, 136, 45)
-    placeMicroMenu()
-    fit(BagsBar, addon.width - 7, 171, addon.chat.width - 14, 28, "BOTTOMRIGHT")
+    local menuX = dock.chat and chatX + addon.chat.width or addon.width
+    local menuY = dock.chat and 201 or aboveDock + 39
+    placeMicroMenu(menuX, menuY)
+    fit(BagsBar, menuX - 7, menuY - 30, addon.chat.width - 14, 28, "BOTTOMRIGHT")
+    local gearY = dock.chat and 147 or aboveDock + 72
+    anchor(console.gear, "BOTTOMRIGHT", console, "BOTTOMLEFT", menuX - 14, gearY)
     if GameTooltipDefaultContainer then
         remember(GameTooltipDefaultContainer)
         place(GameTooltipDefaultContainer, addon.width - 12, 239, "BOTTOMRIGHT")
@@ -402,7 +496,16 @@ local function applyLayoutNow()
 end
 
 local function applyLayout()
-    if layoutApplying then return end
+    if not enteredWorld or layoutApplying then return end
+    layoutQueued = false
+    if InCombatLockdown() then
+        if not layoutPending and not quickSlots and settings.enabled then
+            message("The console will finish loading after combat.")
+        end
+        layoutPending = true
+        return
+    end
+    layoutPending = false
     layoutApplying = true
     local ok, reason = pcall(applyLayoutNow)
     layoutApplying = false
@@ -410,13 +513,16 @@ local function applyLayout()
 end
 
 queueLayout = function()
-    if not console or not settings.enabled or layoutQueued then
+    if not enteredWorld or not settings.enabled or layoutQueued then
+        return
+    end
+    if InCombatLockdown() then
+        applyLayout()
         return
     end
     layoutQueued = true
     C_Timer.After(0, function()
-        layoutQueued = false
-        applyLayout()
+        if layoutQueued then applyLayout() end
     end)
 end
 
@@ -580,12 +686,7 @@ local function openPortraitControls()
     panel:SetFrameStrata("DIALOG")
     panel:SetClampedToScreen(true)
     panel:EnableMouse(true)
-    panel:SetBackdrop({
-        bgFile = addon.artPath .. "forsaken\\panel.tga",
-        edgeFile = addon.artPath .. "forsaken\\border.tga",
-        edgeSize = 18,
-        insets = { left = 6, right = 6, top = 6, bottom = 6 },
-    })
+    addon.SetWindowTheme(panel, settings.theme, true)
     table.insert(UISpecialFrames, panel:GetName())
     console:HookScript("OnHide", function() panel:Hide() end)
 
@@ -639,9 +740,10 @@ local function openPortraitControls()
 end
 
 local function createPortraitBar(y)
-    local bar = CreateFrame("StatusBar", nil, console)
+    local panel = console.dockFrames.character.content
+    local bar = CreateFrame("StatusBar", nil, panel)
     bar:SetSize(70, 9)
-    bar:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", 217, y)
+    bar:SetPoint("BOTTOMLEFT", panel, "BOTTOMLEFT", 217, y)
     bar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
     local text = bar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     text:SetAllPoints()
@@ -725,6 +827,8 @@ end
 local function selectTheme(theme)
     settings.theme = theme
     console:SetTheme(theme)
+    if addon.UpdateCharacterSheetTheme then addon.UpdateCharacterSheetTheme() end
+    if portraitControls then addon.SetWindowTheme(portraitControls, theme, true) end
     queueLayout()
     message(addon.themes[theme].label .. " theme selected.")
 end
@@ -736,6 +840,7 @@ local function setEnabled(enabled)
     if addon.RefreshCharacterSheet then
         addon.RefreshCharacterSheet()
     end
+    if addon.RefreshProfessionLayout then addon.RefreshProfessionLayout() end
 end
 
 local function printThemes()
@@ -764,13 +869,15 @@ local function initialize()
     settings.theme = addon.themes[settings.theme] and settings.theme or "human"
     settings.enabled = settings.enabled ~= false
     addon.SetupCharacterSheet(settings, character)
+    addon.SetupProfessionLayout(settings)
 
     console = addon.CreateArt()
     console:SetTheme(settings.theme)
-    local portrait = console:CreateTexture(nil, "OVERLAY")
+    local panel = console.dockFrames.character.content
+    local portrait = panel:CreateTexture(nil, "OVERLAY")
     portrait:SetSize(58, 58)
-    portrait:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", 223, 35)
-    local portraitBorder = console:CreateTexture(nil, "OVERLAY", nil, 1)
+    portrait:SetPoint("BOTTOMLEFT", panel, "BOTTOMLEFT", 223, 35)
+    local portraitBorder = panel:CreateTexture(nil, "OVERLAY", nil, 1)
     portraitBorder:SetTexture(addon.artPath .. "other\\golden_frame.tga")
     portraitBorder:SetSize(62, 62)
     portraitBorder:SetPoint("CENTER", portrait, "CENTER")
@@ -793,9 +900,9 @@ local function initialize()
     console.health:SetStatusBarColor(0.20, 0.76, 0.14)
     console.power = createPortraitBar(3)
     addon.CreateProfile(console, character)
-    quickSlots = addon.CreateQuickSlots(character)
 
     local gear = CreateFrame("Button", nil, console)
+    console.gear = gear
     gear:SetSize(19, 19)
     gear:SetPoint("BOTTOMRIGHT", console, "BOTTOMRIGHT", -14, 147)
     gear:SetNormalTexture(addon.artPath .. "other\\cogwheel.tga")
@@ -839,7 +946,7 @@ local function initialize()
                 end
             end)
             if addon.RefreshCharacterSheet then
-                menu:CreateCheckbox("Forsaken Character window", function()
+                menu:CreateCheckbox("Themed Character window", function()
                     return settings.forsakenSheet ~= false
                 end, function()
                     settings.forsakenSheet = settings.forsakenSheet == false
@@ -874,6 +981,14 @@ local function initialize()
     end
     hooksecurefunc(EditModeManagerFrame, "SetToLayoutAnchor", queueLayout)
     hooksecurefunc(MainActionBar, "UpdateGridLayout", restoreDockAfterNativeUpdate)
+    for _, bar in pairs({ PetActionBar, StanceBar }) do
+        bar:HookScript("OnShow", queueLayout)
+        for _, method in ipairs({ "UpdateGridLayout", "ApplySystemAnchor" }) do
+            if type(bar[method]) == "function" then
+                hooksecurefunc(bar, method, restoreDockAfterNativeUpdate)
+            end
+        end
+    end
     hooksecurefunc(MinimapCluster, "UpdateMinimapConfig", queueLayout)
     hooksecurefunc(MinimapCluster, "SetHeaderUnderneath", queueLayout)
     hooksecurefunc(MinimapCluster, "SetEditModeScale", queueLayout)
@@ -888,6 +1003,20 @@ local function initialize()
     end
     hooksecurefunc(MicroMenu, "ResetMicroMenuPosition", restoreDockAfterNativeUpdate)
     hooksecurefunc(MicroMenuContainer, "Layout", restoreDockAfterNativeUpdate)
+    if PetFrame then
+        PetFrame:HookScript("OnShow", queueLayout)
+        for _, method in ipairs({ "ApplySystemAnchor", "UpdateSystemSettingFrameSize" }) do
+            if type(PetFrame[method]) == "function" then
+                hooksecurefunc(PetFrame, method, restoreDockAfterNativeUpdate)
+            end
+        end
+    end
+    if TotemFrame then
+        TotemFrame:HookScript("OnShow", queueLayout)
+        if type(TotemFrame.Update) == "function" then
+            hooksecurefunc(TotemFrame, "Update", restoreDockAfterNativeUpdate)
+        end
+    end
     for _, bar in ipairs({ MultiBarBottomLeft, MultiBarBottomRight }) do
         bar:HookScript("OnShow", updateOptionalRows)
         bar:HookScript("OnHide", updateOptionalRows)
@@ -900,8 +1029,15 @@ local function initialize()
     addon.UpdateCombatStats(console)
     addon.UpdateProfile(console)
     addon.UpdatePlayerStatus(console)
-    queueLayout()
-    addon.RegisterSettings(settings, setEnabled, selectTheme)
+    addon.RegisterSettings(settings, setEnabled, selectTheme, character, function()
+        applyLayout()
+        if settings.enabled and InCombatLockdown() then
+            message("The console layout will update after combat.")
+        end
+    end, function()
+        addon.UpdateProfileName(console)
+        if addon.RefreshCharacterName then addon.RefreshCharacterName() end
+    end)
 end
 
 events:RegisterEvent("PLAYER_LOGIN")
@@ -934,6 +1070,8 @@ events:RegisterUnitEvent("UNIT_PORTRAIT_UPDATE", "player")
 events:RegisterUnitEvent("UNIT_MODEL_CHANGED", "player")
 events:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
 events:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
+events:RegisterUnitEvent("UNIT_PET", "player")
+events:RegisterUnitEvent("UNIT_NAME_UPDATE", "player")
 events:RegisterUnitEvent("UNIT_HEALTH", "player")
 events:RegisterUnitEvent("UNIT_MAXHEALTH", "player")
 events:RegisterUnitEvent("UNIT_POWER_UPDATE", "player")
@@ -946,7 +1084,11 @@ events:SetScript("OnEvent", function(_, event, ...)
     if event == "PLAYER_LOGIN" then
         initialize()
     elseif console then
-        if event == "UPDATE_EXHAUSTION" or event == "PLAYER_UPDATE_RESTING" then
+        if event == "UNIT_NAME_UPDATE" then
+            addon.UpdateProfileName(console)
+            if addon.RefreshCharacterName then addon.RefreshCharacterName() end
+            return
+        elseif event == "UPDATE_EXHAUSTION" or event == "PLAYER_UPDATE_RESTING" then
             addon.UpdateExperience(console)
             addon.UpdateProfileStats(console, "restedXp")
             addon.UpdatePlayerStatus(console)
@@ -1012,6 +1154,7 @@ events:SetScript("OnEvent", function(_, event, ...)
             if event == "PLAYER_LEVEL_CHANGED" then restoreDockAfterNativeUpdate() end
             return
         elseif event == "PLAYER_ENTERING_WORLD" then
+            enteredWorld = true
             updatePortrait()
             updateHealth()
             updatePower()
@@ -1023,7 +1166,8 @@ events:SetScript("OnEvent", function(_, event, ...)
         if event == "PLAYER_ENTERING_WORLD" or event == "PLAYER_REGEN_ENABLED" or event == "ZONE_CHANGED_NEW_AREA" then
             addon.UpdatePlayerStatus(console)
         end
-        if event == "PLAYER_REGEN_ENABLED" and layoutPending then
+        if (event == "PLAYER_REGEN_ENABLED" and layoutPending)
+            or (not settings.enabled and (event == "PLAYER_ENTERING_WORLD" or event == "EDIT_MODE_LAYOUTS_UPDATED")) then
             applyLayout()
         else
             queueLayout()

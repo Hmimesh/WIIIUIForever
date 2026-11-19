@@ -29,7 +29,7 @@ function addon.CreateStatusIndicators(console, character)
     if options.style ~= "simple" then options.style = "warcraft" end
     console.statusIndicators = {}
     for _, kind in ipairs({ "pvp", "combat" }) do
-        local badge = CreateFrame("Frame", nil, console, "BackdropTemplate")
+        local badge = CreateFrame("Frame", nil, console.dockFrames.character.content, "BackdropTemplate")
         badge:EnableMouse(true)
         badge.chrome = addon.CreateConsoleChrome(badge)
         badge.icon = badge:CreateTexture(nil, "ARTWORK")
@@ -109,7 +109,7 @@ function addon.UpdatePlayerStatus(console)
         badge.chrome:SetTheme(console.theme)
         badge.chrome:SetShown(options.style == "warcraft")
         badge:ClearAllPoints()
-        badge:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", x, 127)
+        badge:SetPoint("BOTTOMLEFT", badge:GetParent(), "BOTTOMLEFT", x, 127)
         badge.icon:ClearAllPoints()
         badge.label:ClearAllPoints()
         if mode == "both" then

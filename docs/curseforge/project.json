@@ -6,13 +6,20 @@
   "game": "World of Warcraft",
   "class": "Addons",
   "mainCategory": "HUDs",
-  "additionalCategories": ["Artwork", "Action Bars", "Unit Frames", "Bags & Inventory"],
+  "additionalCategories": [
+    "Artwork",
+    "Action Bars",
+    "Unit Frames",
+    "Bags & Inventory"
+  ],
   "flavor": "Forever",
-  "gameVersions": ["1.60.1"],
+  "gameVersions": [
+    "1.60.1"
+  ],
   "interface": 16001,
-  "fileDisplayName": "WIIIUI Forever 0.6.13-alpha2",
-  "fileName": "WIIIUIForever-0.6.13-alpha2.zip",
-  "releaseType": "Alpha",
+  "fileDisplayName": "WIIIUI Forever 0.7.0-beta1",
+  "fileName": "WIIIUIForever-0.7.0-beta1.zip",
+  "releaseType": "Beta",
   "sourceCommit": "HEAD",
   "sourceUrl": "https://github.com/Hmimesh/WIIIUIForever",
   "issuesUrl": "https://github.com/Hmimesh/WIIIUIForever/issues",
@@ -30,7 +37,11 @@
     "permissionEvidence": null
   },
   "alternativeProjects": [
-    {"name": "Warcraft 3 UI: Forever Edition", "author": "Infinityaddons", "url": "https://www.curseforge.com/wow/addons/warcraft-3-ui-forever-edition"}
+    {
+      "name": "Warcraft 3 UI: Forever Edition",
+      "author": "Infinityaddons",
+      "url": "https://www.curseforge.com/wow/addons/warcraft-3-ui-forever-edition"
+    }
   ],
   "projectAvatar": "avatar-candidate.png",
   "projectAvatarStatus": "Original geometric UI monogram candidate; maintainer review pending. Does not change the in-game addon icon.",

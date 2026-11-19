@@ -1,44 +1,24 @@
-0.6.13-alpha2
-- Include the CC BY 4.0 license for original addon code; third-party artwork is excluded.
-- Prepare the alpha listing, gallery, and separate project avatar candidate.
-- Document this reimagining as an optional sidegrade and link another Forever fork.
-- Add a bug-report icon in Settings that opens a copyable GitHub issue link.
-- Fade from the level label to current and required XP on hover.
-- Keep the console docked during level-up and share the saved Edit Mode layout across characters.
+WIIIUI Forever 0.7.0-beta1 - First public beta
 
-0.6.13-alpha1
-- Join the Human chat rail through two mortar gaps with one complete stone span.
-- Use plain bone in the Undead chat bridge instead of duplicating the large fracture.
-- Keep the Night Elf and Orc chat borders unchanged.
+For World of Warcraft: Forever 1.60.1 (Interface 16001).
 
-0.6.12-alpha1
-- Remove the overlapping leafy sections in the Night Elf chat border.
-- Join its corner to one continuous beam and the original right ornament.
-- Preserve the Human, Orc and Undead borders.
+- Four Warcraft III-inspired console themes: Human, Orc, Forsaken/Undead, and Night Elf, with matching Character and inventory artwork.
+- Customizable console layout: reorder or hide the minimap, character panel, action bars, quick slots, and chat as whole boxes. Borders follow each box, and layouts save per character.
+- A four-panel Character window for talents, statistics, model/equipment, and inventory. Browse talent ranks and open the native talent tree to make changes. The same themed window remains available in combat.
+- Movable Character and inventory windows with saved positions. View all carried bags, the backpack, an individual bag, or hide the inventory panel.
+- Animated character portrait with per-character X/Y/Z framing, camera lock, reset, and reapply controls.
+- Optional full character names, including surnames, on the HUD and Character window through Settings > AddOns > WIIIUI Forever.
+- Four selectable HUD statistics with equipment-aware icons, including damage, armor, ammo, weapon DPS, crit, spell/healing information, rested XP, combat DPS, and highest-damage ability. Combat statistics use Forever's native damage meter.
+- Separate health and resource display options: numbers, percentages, both, or hidden.
+- Level and class display with XP hover details and a rested-XP segment.
+- Six optional quick slots for dragged items and spells; assignments remain saved when the panel is hidden.
+- Pet controls, class quick bars, and round summon/minion trackers above the HUD, with space for the cast bar.
+- Configurable PvP and combat indicators with icon/text modes, frame styles, and visibility options.
+- Optional session ribbon with XP/hour, gold gained, gold/hour, session duration, time-to-level, and other selectable metrics, plus a Warcraft III day/night clock.
+- Square minimap with coordinates, zone/time display, day/night indicator, and supported addon buttons arranged above it.
+- Shared WIIIUI Forever Bars Edit Mode layout, protected layout changes deferred until combat ends, and /wiiiui off to restore the previous native layout.
+- Integrated bug-report link in Settings > AddOns > WIIIUI Forever.
 
-0.6.11-alpha1
-- Give each theme an independent chat-border texture set.
-- Restore Night Elf's full corner sheet without reusing cropped or blended regions.
-- Keep Human and Undead joins separate when switching themes.
-
-0.6.10-alpha1
-- Join the Human chat border through its low stone course without extra raised stones.
-- Match the Undead chat bridge and end to the same bone artwork and baseline.
-- Preserve the approved Orc and Night Elf border geometry and artwork.
-
-0.6.9-alpha1
-- Keep the original long chat-top artwork intact instead of repeating its decoration.
-- Use forward-facing interior rail sections with matching edge profiles.
-- Leave action buttons, panel positions, portraits and XP sizing unchanged.
-
-0.6.8-alpha1
-- Align border bodies, fixed corners and shared posts at a consistent scale.
-- Keep only one post between the quick slots and chat.
-- Match the six quick-slot buttons to the original texture's wells.
-- Correct the Night Elf chat corner's beam baseline.
-- Use interior border sections with matching mirrored edge pixels.
-- Round border and XP frame layout to physical pixels using the client API.
-- Retain the medium XP bar size and its rested-XP display.
-- Include the addon-list icon and install/feedback instructions.
-
-This is an alpha build. Please report issues through the project's GitHub page.
+No companion addons are required. Configure console layout and full names in
+Settings > AddOns > WIIIUI Forever; use the cog above chat for gameplay display
+and theme options. Other WoW clients are not currently tested.

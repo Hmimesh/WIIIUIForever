@@ -3,7 +3,7 @@ local _, addon = ...
 local issueURL = "https://github.com/Hmimesh/WIIIUIForever/issues/new"
 local issueDialog = "WIIIUIFOREVER_ISSUE_LINK"
 
-function addon.RegisterSettings(settings, setEnabled, selectTheme)
+function addon.RegisterSettings(settings, setEnabled, selectTheme, character, applyDockLayout, refreshNames)
     if not Settings or not Settings.RegisterCanvasLayoutCategory then return end
 
     StaticPopupDialogs[issueDialog] = {
@@ -39,7 +39,11 @@ function addon.RegisterSettings(settings, setEnabled, selectTheme)
         GameTooltip:AddLine("GitHub Issues", 1, 1, 1)
         GameTooltip:Show()
     end)
-    report:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    local function hideReportTooltip(self)
+        if GameTooltip:GetOwner() == self then GameTooltip:Hide() end
+    end
+    report:SetScript("OnLeave", hideReportTooltip)
+    report:SetScript("OnHide", hideReportTooltip)
     report:SetScript("OnClick", function() StaticPopup_Show(issueDialog) end)
 
     local enabled = CreateFrame("CheckButton", nil, panel, "UICheckButtonTemplate")
@@ -67,11 +71,21 @@ function addon.RegisterSettings(settings, setEnabled, selectTheme)
         end)
     end)
 
+    local fullName = CreateFrame("CheckButton", nil, panel, "UICheckButtonTemplate")
+    fullName:SetPoint("TOPLEFT", themeLabel, "BOTTOMLEFT", -4, -16)
+    fullName.Text:SetText("Show full character name (first name and surname)")
+    fullName:SetScript("OnClick", function(self)
+        character.showFullName = not not self:GetChecked()
+        refreshNames()
+    end)
+
     panel:SetScript("OnShow", function()
         enabled:SetChecked(settings.enabled)
         themeButton:SetText(addon.themes[settings.theme].label)
+        fullName:SetChecked(character.showFullName == true)
     end)
 
+    addon.CreateDockOptions(panel, fullName, character, applyDockLayout)
     local category = Settings.RegisterCanvasLayoutCategory(panel, "WIIIUI Forever")
     Settings.RegisterAddOnCategory(category)
 end

@@ -19,9 +19,13 @@ def prepare():
     archive = runpy.run_path(str(root / "tools" / "package-wiiiui.py"))["build"]()
     if metadata["fileName"] != archive.name:
         raise ValueError("Listing filename does not match the verified addon version")
-    if metadata["releaseType"] != "Alpha" or metadata["interface"] != 16001:
+    release_type = metadata["releaseType"]
+    if release_type not in {"Alpha", "Beta", "Release"} or metadata["interface"] != 16001:
         raise ValueError("Review release type and target client before preparing")
     version = archive.stem.removeprefix("WIIIUIForever-")
+    expected_type = "Alpha" if "-alpha" in version else "Beta" if "-beta" in version else "Release"
+    if release_type != expected_type:
+        raise ValueError("Release type does not match the addon version")
     if version not in (draft / "CHANGELOG.md").read_text(encoding="utf-8"):
         raise ValueError("Listing changelog version is stale")
     committed_toc = subprocess.check_output(
@@ -65,7 +69,7 @@ def prepare():
         f"Upload only {archive.name} as the addon file.\n"
         "Use DESCRIPTION.md, CHANGELOG.md, project.json and gallery.json for listing fields.\n"
         "The 400x400 avatar is a candidate for maintainer review. The in-game icon is unchanged.\n"
-        "Release type: Alpha. Flavor: Forever. Game version: 1.60.1.\n"
+        f"Release type: {release_type}. Flavor: Forever. Game version: 1.60.1.\n"
         "License: CC BY 4.0 for original code only; third-party artwork and upstream material are excluded.\n"
         "Do not upload this entire review folder as an addon.\n"
         "Nothing in this kit creates a project, sends a message, or uploads a file.\n",

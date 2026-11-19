@@ -1,20 +1,24 @@
-# 0.6.13-alpha2 — CurseForge preparation
+# WIIIUI Forever 0.7.0-beta1 — First public beta
 
-- Include the CC BY 4.0 license for original addon code, with third-party artwork explicitly excluded.
-- Add updated gallery images, listing copy, and a separate project avatar candidate.
-- Describe the project as an optional sidegrade and link Warcraft 3 UI: Forever Edition.
-- Add a bug-report icon in Settings that opens a copyable GitHub issue link.
-- Show current and required XP when hovering over the level bar.
-- Keep the console docked during level-up and share the saved Edit Mode layout across characters.
+For World of Warcraft: Forever 1.60.1 (Interface 16001).
 
-# 0.6.13-alpha1 — fixed borders
+- Four Warcraft III-inspired console themes: Human, Orc, Forsaken/Undead, and Night Elf, with matching Character and inventory artwork.
+- Customizable console layout: reorder or hide the minimap, character panel, action bars, quick slots, and chat as whole boxes. Borders follow each box, and layouts save per character.
+- A four-panel Character window for talents, statistics, model/equipment, and inventory. Browse talent ranks and open the native talent tree to make changes. The same themed window remains available in combat.
+- Movable Character and inventory windows with saved positions. View all carried bags, the backpack, an individual bag, or hide the inventory panel.
+- Animated character portrait with per-character X/Y/Z framing, camera lock, reset, and reapply controls.
+- Optional full character names, including surnames, on the HUD and Character window through Settings > AddOns > WIIIUI Forever.
+- Four selectable HUD statistics with equipment-aware icons, including damage, armor, ammo, weapon DPS, crit, spell/healing information, rested XP, combat DPS, and highest-damage ability. Combat statistics use Forever's native damage meter.
+- Separate health and resource display options: numbers, percentages, both, or hidden.
+- Level and class display with XP hover details and a rested-XP segment.
+- Six optional quick slots for dragged items and spells; assignments remain saved when the panel is hidden.
+- Pet controls, class quick bars, and round summon/minion trackers above the HUD, with space for the cast bar.
+- Configurable PvP and combat indicators with icon/text modes, frame styles, and visibility options.
+- Optional session ribbon with XP/hour, gold gained, gold/hour, session duration, time-to-level, and other selectable metrics, plus a Warcraft III day/night clock.
+- Square minimap with coordinates, zone/time display, day/night indicator, and supported addon buttons arranged above it.
+- Shared WIIIUI Forever Bars Edit Mode layout, protected layout changes deferred until combat ends, and /wiiiui off to restore the previous native layout.
+- Integrated bug-report link in Settings > AddOns > WIIIUI Forever.
 
-- Refined Human, Orc, Undead, and Night Elf console borders using matching sections of the original texture sheets.
-- Aligned border corners, shared posts, and chat rails without squeezing or stacking decorative sections.
-- Gave each theme its own cached chat textures so switching themes preserves the other themes' geometry and artwork.
-- Corrected the Human stone and Undead bone joins above chat and the Night Elf foliage transition.
-- Fitted the XP bar and its frame inside the character panel while retaining rested XP and hover details.
-- Aligned the six quick-slot buttons with the artwork's slot wells.
-- Added standalone installation/feedback notes, package verification, and updated screenshots.
-
-Alpha build for Forever 1.60.1 / Interface 16001. Please report issues with reproduction steps, character race/class, theme, resolution, UI scale, and any Lua error.
+No companion addons are required. Configure console layout and full names in
+Settings > AddOns > WIIIUI Forever; use the cog above chat for gameplay display
+and theme options. Other WoW clients are not currently tested.

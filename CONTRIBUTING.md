@@ -1,6 +1,6 @@
 # Contributing to WIIIUI Forever
 
-WIIIUI Forever is in alpha. Bug reports, fixes, feature ideas, and testing on different races, classes, resolutions, and UI scales are welcome.
+WIIIUI Forever is in beta. Bug reports, fixes, feature ideas, and testing on different races, classes, resolutions, and UI scales are welcome.
 
 ## Report a bug
 

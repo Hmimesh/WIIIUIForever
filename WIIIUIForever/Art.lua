@@ -31,6 +31,7 @@ local themes = {
     },
     orc = {
         label = "Orc",
+        detachedPortraitHeight = 136,
         mapButtons = { x = 166, 134, 112, 89, 67, 37 },
         -- Start beyond the first clamp; the original clamp inside the span
         -- supplies the joint without reflecting the bolts or metal grain.
@@ -91,6 +92,21 @@ function addon.CreateArt()
     console:SetRoundLayoutToNearestPixel(true)
     console:Hide()
 
+    local frames = {}
+    console.dockFrames = frames
+    for _, box in ipairs(addon.dockBoxes) do
+        local frame = CreateFrame("Frame", nil, console)
+        frame:SetSize(box.width, console:GetHeight())
+        frame:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", box.x, 0)
+        frame:SetFrameLevel(console:GetFrameLevel())
+        local content = CreateFrame("Frame", nil, frame)
+        content:SetSize(addon.width, console:GetHeight())
+        content:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", -box.x, 0)
+        content:SetFrameLevel(console:GetFrameLevel())
+        frame.content = content
+        frames[box.key] = frame
+    end
+
     local pieces = {}
     local strips = {}
     local function rect(texture, parent, x, y, width, height)
@@ -111,24 +127,49 @@ function addon.CreateArt()
         return texture
     end
 
-    local function strip(file, x, y, width, cropKey, layer)
-        local entry = { file = file, x = x, y = y, width = width, cropKey = cropKey, textures = {} }
+    local function strip(file, x, y, width, cropKey, layer, parent)
+        local entry = { file = file, x = x, y = y, width = width, cropKey = cropKey, textures = {}, parent = parent }
         for index = 1, 8 do
-            entry.textures[index] = console:CreateTexture(nil, layer or "ARTWORK")
+            entry.textures[index] = parent:CreateTexture(nil, layer or "ARTWORK")
             entry.textures[index]:SetRoundLayoutToNearestPixel(true)
         end
         strips[#strips + 1] = entry
     end
 
     local grid, chat = addon.grid, addon.chat
-    -- Overlap the three interior backings so transparent seams between the
-    -- original sheets never show the world through the console.
-    piece(nil, 7, 0, 196, 150, nil, "BACKGROUND"):SetColorTexture(0.014, 0.012, 0.01, 1)
-    piece(nil, 197, 0, 894, 125, nil, "BACKGROUND"):SetColorTexture(0.014, 0.012, 0.01, 1)
-    piece(nil, chat.x - 4, 0, chat.width + 4, chat.height + 3, nil, "BACKGROUND")
-        :SetColorTexture(0.014, 0.012, 0.01, 1)
-    piece("minimap_portrait\\minimap", 0, 0, 256, 256)
-    local mapTrim = CreateFrame("Frame", nil, console)
+    local map, character, actions = frames.map.content, frames.character.content, frames.actions.content
+    local quick, chatPanel = frames.quick.content, frames.chat.content
+    local backingHeights = { map = 150, character = 125, actions = 125, quick = 125, chat = chat.height + 3 }
+    local edgeHeights = { map = 146, character = 124, actions = 123, quick = 125, chat = 148 }
+    local caps = {}
+    for _, box in ipairs(addon.dockBoxes) do
+        local panel = frames[box.key].content
+        local inset = box.key == "map" and 7 or 0
+        piece(nil, box.x + inset, 0, box.width - inset, backingHeights[box.key], nil, "BACKGROUND", panel)
+            :SetColorTexture(0.014, 0.012, 0.01, 1)
+        local edgeHeight = edgeHeights[box.key]
+        -- Chat already has its own left post and right jamb.
+        if box.key ~= "chat" then
+            local left = piece("bottom right\\BottomRight_Middle", box.x + inset, 0, 7, edgeHeight,
+                "chatSide", "OVERLAY", panel)
+            local right = piece("bottom right\\BottomRight_Middle", box.x + box.width - 7, 0, 7, edgeHeight,
+                "chatSide", "OVERLAY", panel)
+            caps[box.key] = { left = left, right = right }
+            left:Hide()
+            right:Hide()
+        end
+    end
+    local mapWidth = addon.dockBoxes[1].width
+    piece("minimap_portrait\\minimap", 0, 0, mapWidth, 256,
+        { 512, 512, 0, 0, mapWidth * 2, 512 }, nil, map)
+    local joinedPortrait = piece("minimap_portrait\\minimap", mapWidth, 0, 256 - mapWidth, 256,
+        { 512, 512, mapWidth * 2, 0, 512, 512 }, nil, character)
+    -- The shared sheet also has small ornaments from the minimap crown.
+    -- Leave those out of the portrait edge when the minimap is elsewhere.
+    local detachedPortrait = piece("minimap_portrait\\minimap", mapWidth, 0, 256 - mapWidth, 148,
+        nil, nil, character)
+    detachedPortrait:Hide()
+    local mapTrim = CreateFrame("Frame", nil, map)
     mapTrim:SetFrameStrata("LOW")
     mapTrim:SetSize(150, 256)
     mapTrim:SetPoint("BOTTOMLEFT")
@@ -139,19 +180,19 @@ function addon.CreateArt()
         crop = { 512, 512, 0, 0, 300, 512 },
     }
     console.mapTrim = mapTrim
-    piece("minimap_portrait\\portrait", 256, 0, 256, 256)
+    piece("minimap_portrait\\portrait", 256, 0, 256, 256, nil, nil, character)
 
     local bounds = addon.portrait
-    local viewport = CreateFrame("Frame", nil, console)
+    local viewport = CreateFrame("Frame", nil, character)
     viewport:SetSize(bounds.width, bounds.height)
-    viewport:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", bounds.x, bounds.y)
+    viewport:SetPoint("BOTTOMLEFT", character, "BOTTOMLEFT", bounds.x, bounds.y)
     viewport:SetFrameLevel(console:GetFrameLevel() + 1)
     viewport:SetClipsChildren(true)
     console.portraitViewport = viewport
 
     -- The portrait opening crosses both source sheets. Draw just this part
     -- of their transparent trim above the model, including the inward spikes.
-    local trim = CreateFrame("Frame", nil, console)
+    local trim = CreateFrame("Frame", nil, character)
     trim:SetAllPoints(viewport)
     trim:SetFrameLevel(viewport:GetFrameLevel() + 2)
     local split = 256 - bounds.x
@@ -167,7 +208,7 @@ function addon.CreateArt()
         local top = 427 - row * 85
         for index = 0, 2 do
             local tile = piece("actionbar\\actionslots_grid", grid.x + index * 160, row * grid.rowHeight,
-                160, grid.rowHeight, { 512, 512, 0, top, 341, top + 85 })
+                160, grid.rowHeight, { 512, 512, 0, top, 341, top + 85 }, nil, actions)
             if row > 0 then
                 optionalRows[row][index + 1] = tile
             end
@@ -182,7 +223,7 @@ function addon.CreateArt()
     end
     -- The source beam overlaps the portrait's right-hand cap. Keep it behind
     -- that cap so the join does not create a second rivet or cover the arch.
-    strip("actionbar\\ext1", grid.x, 117, grid.width, "rail", "ARTWORK")
+    strip("actionbar\\ext1", grid.x, 117, grid.width, "rail", "ARTWORK", actions)
     for _, texture in ipairs(strips[#strips].textures) do texture:SetDrawLayer("ARTWORK", -1) end
 
     -- Each theme owns its chat textures. Once built, their source sheets,
@@ -192,10 +233,10 @@ function addon.CreateArt()
     local function createChatArt(themeName)
         local theme, textures = themes[themeName], {}
         local function texture(file, x, y, width, height, crop, sub)
-            local region = console:CreateTexture(nil, "ARTWORK", nil, sub or 0)
+            local region = chatPanel:CreateTexture(nil, "ARTWORK", nil, sub or 0)
             region:SetRoundLayoutToNearestPixel(true)
             region:SetTexture(addon.artPath .. themeName .. "\\bottom right\\" .. file .. ".tga")
-            rect(region, console, x, y, width, height)
+            rect(region, chatPanel, x, y, width, height)
             if crop then
                 local atlasWidth, atlasHeight, left, top, right, bottom = unpack(crop)
                 region:SetTexCoord(left / atlasWidth, right / atlasWidth, top / atlasHeight, bottom / atlasHeight)
@@ -247,13 +288,44 @@ function addon.CreateArt()
     -- Two native 40-unit wells, with the shared right-hand post supplied by
     -- the chat corner. Do not squeeze another copy of that post into 88 units.
     local inventory = piece("inventory\\inventory", addon.quickSlots.x, 0, 80, 256,
-        { 512, 512, 0, 0, 160, 512 }, "OVERLAY")
-    local divider = piece("inventory\\no_inventory", 983, 0, 107, 148, "divider", "OVERLAY")
+        { 512, 512, 0, 0, 160, 512 }, "OVERLAY", quick)
+    local divider = piece("inventory\\no_inventory", 983, 0, 107, 148, "divider", "OVERLAY", quick)
     divider:Hide()
 
     function console:SetQuickSlotsShown(shown)
         inventory:SetShown(shown)
         divider:SetShown(not shown)
+    end
+
+    -- Some sheets overlap their original neighbor. Keep that bleed on a
+    -- shared edge even when the opposite end of the box stands on its own.
+    local overlaps = { actions = { 40, 8 }, quick = { 9, 10 }, chat = { 26, 0 } }
+    function console:SetDockLayout(layout)
+        for _, box in ipairs(addon.dockBoxes) do
+            local frame, position = frames[box.key], layout[box.key]
+            frame:SetShown(position ~= nil)
+            if position then
+                local left, right = 0, 0
+                local overlap = overlaps[box.key]
+                if overlap then
+                    left = position.joinLeft and overlap[1] or 0
+                    right = position.joinRight and overlap[2] or 0
+                    frame:SetClipsChildren(left < overlap[1] or right < overlap[2])
+                end
+                frame:SetWidth(box.width + left + right)
+                frame:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", box.x + position.dx - left, 0)
+                frame.content:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", left - box.x, 0)
+                local cap = caps[box.key]
+                if cap then
+                    cap.left:SetShown(not position.joinLeft and box.key ~= "map")
+                    cap.right:SetShown(not position.joinRight)
+                end
+                if box.key == "character" then
+                    joinedPortrait:SetShown(position.joinLeft == true)
+                    detachedPortrait:SetShown(not position.joinLeft)
+                end
+            end
+        end
     end
 
     function console:SetTheme(themeName)
@@ -270,6 +342,9 @@ function addon.CreateArt()
                 entry.texture:SetTexCoord(left / width, right / width, top / height, bottom / height)
             end
         end
+        local portraitHeight = theme.detachedPortraitHeight or 148
+        rect(detachedPortrait, character, mapWidth, 0, 256 - mapWidth, portraitHeight)
+        detachedPortrait:SetTexCoord(mapWidth / 256, 1, 1 - portraitHeight / 256, 1)
         -- All source pixels have the same half-size density. Rail crops end
         -- on matching cross-sections of mortar, metal, bone or foliage, so
         -- repeats keep their original direction without overlapping motifs.
@@ -289,7 +364,7 @@ function addon.CreateArt()
                     local sourceLeft = left
                     texture:SetTexture(addon.artPath .. themeName .. "\\" .. entry.file .. ".tga")
                     local y = theme.railY or entry.y
-                    rect(texture, self, startX + offset, y, partWidth, tileHeight)
+                    rect(texture, entry.parent, startX + offset, y, partWidth, tileHeight)
                     texture:SetTexCoord(sourceLeft / width, (sourceLeft + partWidth * 2) / width, top / height, bottom / height)
                     offset = last and stripWidth or (offset + tileWidth)
                 end
@@ -306,6 +381,113 @@ function addon.CreateArt()
     end
 
     return console
+end
+
+function addon.GetWindowBacking(theme)
+    return addon.artPath .. theme .. "\\chrome\\window-panel-v2.tga"
+end
+
+function addon.SetCharacterSlotArt(texture, theme)
+    texture:SetTexture(addon.artPath .. theme .. "\\actionbar\\actionslots_grid.tga")
+    texture:SetTexCoord(85 / 512, 171 / 512, 427 / 512, 1)
+end
+
+-- Each theme has four full-length rails and four separately painted corners.
+-- The long quiet rails keep the pattern unobtrusive on the wider windows.
+local borderSize = 9
+local borderSides = {
+    { point = "TOPLEFT", opposite = "BOTTOMRIGHT", x = 1, y = 0, inwardX = 0, inwardY = -1 },
+    { point = "TOPRIGHT", opposite = "BOTTOMLEFT", x = 0, y = -1, inwardX = -1, inwardY = 0 },
+    { point = "BOTTOMRIGHT", opposite = "TOPLEFT", x = -1, y = 0, inwardX = 0, inwardY = 1 },
+    { point = "BOTTOMLEFT", opposite = "TOPRIGHT", x = 0, y = 1, inwardX = 1, inwardY = 0 },
+}
+
+local function placeBorderPiece(region, frame, edge, start, finish, size)
+    -- Anchor both ends to round the shared boundaries at fractional UI scales.
+    region:SetPoint(edge.point, frame, edge.point, edge.x * start, edge.y * start)
+    region:SetPoint(edge.opposite, frame, edge.point,
+        edge.x * finish + edge.inwardX * size, edge.y * finish + edge.inwardY * size)
+end
+
+local function borderCrop(region, side, width)
+    local l, r = 1 / 1024, (1 + width) / 1024
+    local top = 1 + (side - 1) * 50
+    local t, b = top / 512, (top + 48) / 512
+    if side == 1 then
+        region:SetTexCoord(l, r, t, b)
+    elseif side == 2 then
+        region:SetTexCoord(l, b, r, b, l, t, r, t)
+    elseif side == 3 then
+        region:SetTexCoord(r, b, r, t, l, b, l, t)
+    else
+        region:SetTexCoord(r, t, l, t, r, b, l, b)
+    end
+end
+
+local function layoutWindowBorder(frame)
+    local art = frame.factionTrim
+    if not art.path then return end
+
+    local width, height = frame:GetSize()
+    local size = math.min(borderSize, width / 4, height / 4)
+    if size <= 0 then return end
+    local cornerSize = size * 2
+    for side, edge in ipairs(borderSides) do
+        local corner = art.corners[side]
+        corner:SetTexture(art.path)
+        placeBorderPiece(corner, frame, edge, 0, cornerSize, cornerSize)
+        corner:Show()
+
+        local length = (edge.x ~= 0 and width or height) - cornerSize * 2
+        -- The Human steel has directional lighting along each complete rail.
+        -- Start-to-end repetition creates visible bright bands at every join.
+        local tileLength = art.continuous and math.max(1, length) or size * 16
+        local tiles = art.sides[side]
+        local count = math.ceil(length / tileLength)
+        for index = 1, count do
+            local tile = tiles[index]
+            if not tile then
+                tile = frame:CreateTexture(nil, "OVERLAY", nil, 1)
+                tile:SetRoundLayoutToNearestPixel(true)
+                tiles[index] = tile
+            end
+            local offset = (index - 1) * tileLength
+            local visible = math.min(tileLength, length - offset)
+            tile:SetTexture(art.path)
+            placeBorderPiece(tile, frame, edge, cornerSize + offset, cornerSize + offset + visible, size)
+            borderCrop(tile, side, 768 * visible / tileLength)
+            tile:Show()
+        end
+        for index = count + 1, #tiles do tiles[index]:Hide() end
+    end
+end
+
+function addon.SetWindowTheme(frame, themeName, hasBackground)
+    if frame.windowTheme == themeName then return end
+    frame.windowTheme = themeName
+    local backdrop = {
+        bgFile = addon.GetWindowBacking(themeName),
+        tile = themeName ~= "human", tileSize = 192,
+        insets = { left = 6, right = 6, top = 6, bottom = 6 },
+    }
+    frame:SetBackdrop(hasBackground and backdrop or nil)
+
+    local art = frame.factionTrim
+    if not art then
+        art = { corners = {}, sides = {} }
+        frame.factionTrim = art
+        for side in ipairs(borderSides) do
+            local corner = frame:CreateTexture(nil, "OVERLAY", nil, 2)
+            corner:SetRoundLayoutToNearestPixel(true)
+            local left = 1 + (side - 1) * 98
+            corner:SetTexCoord(left / 1024, (left + 96) / 1024, 204 / 512, 300 / 512)
+            art.corners[side], art.sides[side] = corner, {}
+        end
+        frame:HookScript("OnSizeChanged", layoutWindowBorder)
+    end
+    art.continuous = themeName == "human"
+    art.path = addon.artPath .. themeName .. "\\chrome\\window-border-v2.tga"
+    layoutWindowBorder(frame)
 end
 
 -- Warcraft III's UpperButtonBar.fdf uses the upper 170 x 44 pixels of

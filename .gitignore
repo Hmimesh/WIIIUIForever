@@ -9,6 +9,7 @@ __pycache__/
 /Start-RecordPlayer.cmd
 /tools/*
 !/tools/convert-wc3-hud-assets.py
+!/tools/build-window-borders.py
 !/tools/package-wiiiui.py
 !/tools/prepare-curseforge.py
 

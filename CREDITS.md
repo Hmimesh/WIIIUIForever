@@ -13,6 +13,7 @@ Other projects take their own approach to the original addon, including [Warcraf
 ## Artwork provenance
 
 - The Human, Orc, Undead, and Night Elf console texture sheets and shared console art were adapted from the original WIIIUI project's `art/` directory.
+- The current Human, Orc, Forsaken, and Night Elf window borders and backings were generated with built-in ImageGen for this project. Sources and prompts are in `docs/art-source/`. `tools/build-window-borders.py` packs their rails, corners, and backings into game textures. The earlier `window-border.tga` assets contain cropped faction console trim.
 - The Forsaken-style panel, border, and slot textures were converted from the locally installed Warcraft III: Reforged archive.
 - Additional faction rails, button frames, clock ornaments, flags, the day/night panorama, and resource/status icons were converted from the same local Warcraft III installation. `tools/convert-wc3-hud-assets.py` records the DDS-to-TGA mapping for the ribbon/status artwork.
 - Faction cursor textures remain in the asset folder as reference. The active addon uses the WoW Forever client's pointer.

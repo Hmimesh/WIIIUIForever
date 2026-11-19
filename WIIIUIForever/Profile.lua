@@ -1,5 +1,28 @@
 local _, addon = ...
 
+local playerNames = {}
+
+function addon.GetPlayerDisplayName(character)
+    local firstName = UnitName("player")
+    if not issecretvalue(firstName) and type(firstName) == "string" and firstName ~= "" then
+        if playerNames.first ~= firstName then wipe(playerNames) end
+        playerNames.first = firstName
+    end
+    -- Forever's GetUnitName includes the character's surname.
+    -- Keep the last readable names available when combat values are secret.
+    local fullName = GetUnitName and GetUnitName("player")
+    if not issecretvalue(fullName) and type(fullName) == "string" and fullName ~= "" then
+        playerNames.full = fullName
+    end
+    if character.showFullName == true then return playerNames.full or playerNames.first end
+    return playerNames.first
+end
+
+function addon.UpdateProfileName(console)
+    local name = addon.GetPlayerDisplayName(console.characterSettings)
+    if name then console.playerName:SetText(name) end
+end
+
 local slots = {
     { name = "Top left", default = "damage", x = 307, y = 54 },
     { name = "Top right", default = "spell", x = 404, y = 54 },
@@ -197,17 +220,35 @@ local stats = {
 }
 local statOrder = { "damage", "armor", "spell", "healing", "ammo", "meleeDps", "rangedDps", "combatDps", "topAbility", "fightDps", "crit", "restedXp" }
 
-local function experienceTooltip(xp)
-    GameTooltip:SetOwner(xp, "ANCHOR_TOP")
+local function clearProfileTooltip(owner)
+    if GameTooltip:GetOwner() == owner then
+        GameTooltip:Hide()
+    end
+end
+
+local function createProfileHover(parent)
+    local hover = CreateFrame("Frame", nil, parent)
+    -- The transparent native player frame sits above the console art.
+    hover:SetFrameStrata("MEDIUM")
+    hover:SetMouseMotionEnabled(true)
+    hover:SetMouseClickEnabled(false)
+    return hover
+end
+
+local function experienceTooltip(owner)
+    GameTooltip:SetOwner(owner, "ANCHOR_TOP")
     GameTooltip:SetText("Experience")
-    local current, maximum, rested = UnitXP("player"), UnitXPMax("player"), restedExperience()
-    if readableNumber(current) and readableNumber(maximum) and maximum > 0 then
+    local xp = owner:GetParent()
+    local current, maximum, rested = xp.currentXP, xp.maximumXP, xp.restedXP
+    if xp.atMaxLevel then
+        GameTooltip:AddLine("Maximum level", 1, 1, 1)
+    elseif xp.hasExperience then
         GameTooltip:AddLine(string.format("XP %d / %d (%.1f%%)", current, maximum, current / maximum * 100), 1, 1, 1)
-        if readableNumber(rested) then
+        if rested then
             GameTooltip:AddLine(string.format("Rested XP %d (%.1f%% of a level)", rested, rested / maximum * 100), 0.4, 0.7, 1)
         end
-    elseif readableNumber(maximum) and maximum == 0 then
-        GameTooltip:AddLine("Maximum level", 1, 1, 1)
+    else
+        GameTooltip:AddLine("XP unavailable", 1, 1, 1)
     end
     GameTooltip:Show()
 end
@@ -233,6 +274,8 @@ local function updateExperienceText(xp)
 end
 
 function addon.CreateProfile(console, character)
+    console.characterSettings = character
+    local panel = console.dockFrames.character.content
     local function text(parent, x, y, width, font, alignment)
         local label = parent:CreateFontString(nil, "OVERLAY", font)
         label:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", x, y)
@@ -241,12 +284,13 @@ function addon.CreateProfile(console, character)
         return label
     end
 
-    console.playerName = text(console, 307, 112, 190, "GameFontHighlight", "CENTER")
+    console.playerName = text(panel, 307, 112, 190, "GameFontHighlight", "CENTER")
+    console.playerName:SetWordWrap(false)
 
-    local xp = CreateFrame("StatusBar", nil, console)
+    local xp = CreateFrame("StatusBar", nil, panel)
     xp:SetRoundLayoutToNearestPixel(true)
     xp:SetSize(170, 12)
-    xp:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", 317, 91)
+    xp:SetPoint("BOTTOMLEFT", panel, "BOTTOMLEFT", 317, 91)
     xp:SetStatusBarTexture(addon.artPath .. "other\\xpProgressBar.tga")
     xp:SetStatusBarColor(0.63, 0.22, 0.85)
     local background = xp:CreateTexture(nil, "BACKGROUND")
@@ -265,33 +309,33 @@ function addon.CreateProfile(console, character)
     rested:SetVertexColor(0.18, 0.5, 1, 0.8)
     rested:Hide()
     xp.rested = rested
-    xp:EnableMouse(true)
-    xp:SetScript("OnEnter", function(self)
-        self.hovering = true
-        updateExperienceText(self)
-        experienceTooltip(self)
-    end)
-    xp:SetScript("OnLeave", function(self)
-        self.hovering = false
-        updateExperienceText(self)
-        if GameTooltip:GetOwner() == self then
-            GameTooltip:Hide()
-        end
-    end)
-    xp:SetScript("OnHide", function(self)
-        self.hovering = false
-        self.labelBlend, self.labelTarget = 0, 0
-        fadeExperienceText(self, 0)
-        if GameTooltip:GetOwner() == self then
-            GameTooltip:Hide()
-        end
-    end)
     console.xp = xp
     console.level = text(xp, 0, 0, 170, "GameFontHighlightSmall", "CENTER")
     xp.levelLabel = console.level
     xp.valueLabel = text(xp, 0, 0, 170, "GameFontHighlightSmall", "CENTER")
     xp.valueLabel:SetAlpha(0)
     xp.labelBlend, xp.labelTarget = 0, 0
+
+    local xpHover = createProfileHover(xp)
+    xpHover:SetAllPoints(xp)
+    xpHover:SetHitRectInsets(-5, -5, -3, -3)
+    xp.hover = xpHover
+    xpHover:SetScript("OnEnter", function(self)
+        xp.hovering = true
+        updateExperienceText(xp)
+        experienceTooltip(self)
+    end)
+    xpHover:SetScript("OnLeave", function(self)
+        xp.hovering = false
+        updateExperienceText(xp)
+        clearProfileTooltip(self)
+    end)
+    xpHover:SetScript("OnHide", function(self)
+        xp.hovering = false
+        xp.labelBlend, xp.labelTarget = 0, 0
+        fadeExperienceText(xp, 0)
+        clearProfileTooltip(self)
+    end)
 
     character.profileStats = type(character.profileStats) == "table" and character.profileStats or {}
     console.profileStats = character.profileStats
@@ -302,27 +346,26 @@ function addon.CreateProfile(console, character)
         if not stats[console.profileStats[index]] then
             console.profileStats[index] = slot.default
         end
-        local border = console:CreateTexture(nil, "OVERLAY", nil, 1)
-        border:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", slot.x, slot.y)
+        local border = panel:CreateTexture(nil, "OVERLAY", nil, 1)
+        border:SetPoint("BOTTOMLEFT", panel, "BOTTOMLEFT", slot.x, slot.y)
         border:SetSize(28, 28)
         border:SetTexture(addon.artPath .. "other\\golden_frame.tga")
 
-        local icon = console:CreateTexture(nil, "OVERLAY")
+        local icon = panel:CreateTexture(nil, "OVERLAY")
         icon:SetPoint("BOTTOMLEFT", border, "BOTTOMLEFT", 1, 1)
         icon:SetSize(26, 26)
         icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 
         console.statSlots[index] = {
             icon = icon,
-            label = text(console, slot.x + 32, slot.y + 14, 65, "GameFontNormalSmall", "LEFT"),
-            value = text(console, slot.x + 32, slot.y + 2, 62, "GameFontHighlightSmall", "LEFT"),
+            label = text(panel, slot.x + 32, slot.y + 14, 65, "GameFontNormalSmall", "LEFT"),
+            value = text(panel, slot.x + 32, slot.y + 2, 62, "GameFontHighlightSmall", "LEFT"),
         }
         local widget = console.statSlots[index]
         widget.label:SetWordWrap(false)
-        local hover = CreateFrame("Frame", nil, console)
-        hover:SetPoint("BOTTOMLEFT", console, "BOTTOMLEFT", slot.x, slot.y)
+        local hover = createProfileHover(panel)
+        hover:SetPoint("BOTTOMLEFT", panel, "BOTTOMLEFT", slot.x, slot.y)
         hover:SetSize(96, 28)
-        hover:EnableMouse(true)
         hover:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_TOP")
             local key = console.profileStats[index]
@@ -337,10 +380,8 @@ function addon.CreateProfile(console, character)
             end
             GameTooltip:Show()
         end)
-        hover:SetScript("OnLeave", function(self)
-            if GameTooltip:GetOwner() == self then GameTooltip:Hide() end
-        end)
-        widget.hover = hover
+        hover:SetScript("OnLeave", clearProfileTooltip)
+        hover:SetScript("OnHide", clearProfileTooltip)
     end
 end
 
@@ -395,16 +436,20 @@ end
 function addon.UpdateExperience(console)
     local current, maximum, rested = UnitXP("player"), UnitXPMax("player"), restedExperience()
     local xp = console.xp
-    xp.hasExperience = readableNumber(current) and readableNumber(maximum) and maximum > 0
+    xp.currentXP = readableNumber(current) and current or nil
+    xp.maximumXP = readableNumber(maximum) and maximum or nil
+    xp.restedXP = rested
+    xp.atMaxLevel = xp.maximumXP == 0 or GameRulesUtil.IsPlayerAtEffectiveMaxLevel()
+    xp.hasExperience = not xp.atMaxLevel and xp.currentXP and xp.maximumXP and xp.maximumXP > 0
     if xp.hasExperience then
-        xp.valueLabel:SetFormattedText("%d/%d XP", current, maximum)
+        xp.valueLabel:SetFormattedText("%d / %d XP", current, maximum)
     end
     updateExperienceText(xp)
     xp.rested:Hide()
-    if readableNumber(current) and readableNumber(maximum) then
-        xp:SetMinMaxValues(0, math.max(maximum, 1))
-        xp:SetValue(maximum > 0 and current or 1)
-        if maximum > 0 and readableNumber(rested) and rested > 0 then
+    if xp.hasExperience then
+        xp:SetMinMaxValues(0, maximum)
+        xp:SetValue(current)
+        if rested and rested > 0 then
             local start = math.max(0, math.min(1, current / maximum))
             local finish = math.max(start, math.min(1, (current + rested) / maximum))
             if finish > start then
@@ -414,19 +459,19 @@ function addon.UpdateExperience(console)
                 xp.rested:Show()
             end
         end
+    else
+        xp:SetMinMaxValues(0, 1)
+        xp:SetValue(xp.atMaxLevel and 1 or 0)
     end
-    if GameTooltip:GetOwner() == xp then
-        experienceTooltip(xp)
+    if GameTooltip:GetOwner() == xp.hover then
+        experienceTooltip(xp.hover)
     end
 end
 
 function addon.UpdateProfile(console)
-    local name = UnitName("player")
+    addon.UpdateProfileName(console)
     local class = UnitClass("player")
     local level = UnitLevel("player")
-    if not issecretvalue(name) and name then
-        console.playerName:SetText(name)
-    end
     if not issecretvalue(class) and class and readableNumber(level) then
         console.level:SetText(LEVEL .. " " .. level .. " " .. class)
     end

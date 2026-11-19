@@ -4,16 +4,19 @@
 ## X-Website: https://github.com/Hmimesh/WIIIUIForever
 ## IconTexture: Interface\AddOns\WIIIUIForever\art\icon.tga
 ## Notes: Warcraft III console art for World of Warcraft: Forever
-## Version: 0.6.13-alpha2
+## Version: 0.7.0-beta1
 ## SavedVariables: WIIIUIForeverDB
 ## SavedVariablesPerCharacter: WIIIUIForeverCharacterDB
 
 Art.lua
+DockLayout.lua
 StatusIndicators.lua
 Profile.lua
 SessionRibbon.lua
 QuickSlots.lua
+CharacterTalents.lua
 CharacterSheet.lua
+ProfessionLayout.lua
 NativeLayout.lua
 BugReport.lua
 WIIIUIForever.lua

@@ -2,7 +2,7 @@
 
 Bring a Warcraft III-style command console to World of Warcraft: Forever.
 
-**Alpha: 0.6.13-alpha2.** Built for **Forever 1.60.1 / Interface 16001**. Other WoW clients are not currently supported or tested. Bug reports, ideas, and contributions are welcome.
+**Beta: 0.7.0-beta1.** Built for **Forever 1.60.1 / Interface 16001**. Other WoW clients are not currently supported or tested. Bug reports, ideas, and contributions are welcome.
 
 ## Choose your console
 
@@ -12,6 +12,8 @@ The console arranges WoW's native action bars, minimap, chat, and menus inside f
 
 ## Make it your own
 
+- Reorder or hide whole console boxes in Settings > AddOns > WIIIUI Forever. Faction borders follow their new positions, with layouts saved per character.
+- Optional first name and surname on the HUD and Character window.
 - Animated player portrait with per-character framing, camera lock, reset, and reapply controls.
 - Four selectable character stats, including weapon damage, armor, ammo, melee or ranged DPS, crit, spell/healing information, rested XP, combat DPS, and the highest-damage ability.
 - Equipment-aware icons for supported stats. Combat statistics use Forever's native damage meter and reset for each fight.
@@ -20,7 +22,9 @@ The console arranges WoW's native action bars, minimap, chat, and menus inside f
 - Optional six-slot item/spell panel between the action bars and chat. Hiding the panel retains your assignments.
 - Configurable PvP and combat indicators, with icons, text, styling, and visibility options.
 - Session ribbon with selectable XP/hour, gold gained, gold/hour, session time, time-to-level, and other metrics, plus an optional day/night clock.
-- Optional Forsaken Kingdom-inspired character window and a separately movable inventory panel. Choose all carried bags, the backpack, an individual bag, or no inventory panel.
+- A four-panel Character window for talents, statistics, model/equipment, and inventory, with matching Human, Orc, Forsaken, or Night Elf artwork. The themed window is available in combat. Move the Character window and inventory separately, and choose all carried bags, the backpack, an individual bag, or no inventory panel.
+- Pet controls, class quick bars, and round minion trackers placed above the HUD.
+- Square minimap with coordinates, zone/time display, and supported addon buttons arranged above it.
 
 No companion addons are required. MoveAnything and the original WIIIUI do not need to be installed.
 
@@ -34,7 +38,7 @@ World of Warcraft/_forever_/Interface/AddOns/
 
 The file `WIIIUIForever.toc` must be directly inside the `WIIIUIForever` folder. Restart the game after a first installation and enable **WIIIUI Forever** in the AddOn list.
 
-Open the cog above chat to configure the addon. Human is the default style.
+Open the cog above chat for display and theme controls. Open Settings > AddOns > WIIIUI Forever for console layout, full character names, and the bug-report link. Human is the default style.
 
 ```text
 /wiiiui human
@@ -47,7 +51,7 @@ Open the cog above chat to configure the addon. Human is the default style.
 
 `/wiiiui off` restores the native layout; `/wiiiui on` returns to the console. Protected layout and quick-slot changes wait until combat ends.
 
-## Alpha feedback
+## Beta feedback
 
 Portrait framing, appearance transitions, resolutions/UI scales, and compatibility with other UI addons are still being refined. Please include your addon/client versions, character race/class, theme, resolution, UI scale, reproduction steps, and the first Lua error when reporting an issue. Let us know whether it happens after login, a reload, leveling, combat, or an equipment change.
 

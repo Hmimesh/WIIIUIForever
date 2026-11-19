@@ -163,11 +163,12 @@ function addon.SetupSessionRibbon(console, character, settings, openSettings)
         elseif key == "levelTime" then
             local maximum, xp = UnitXPMax("player"), UnitXP("player")
             if not readable(maximum) or not readable(xp) then return "—" end
-            if maximum == 0 then return "Max level" end
+            if maximum == 0 or GameRulesUtil.IsPlayerAtEffectiveMaxLevel() then return "Max level" end
             if session.xp == 0 then return "—" end
             return duration(math.max(0, maximum - xp) * rateElapsed / session.xp)
         elseif key == "rested" then
             local rested = GetXPExhaustion()
+            if issecretvalue(rested) then return "—" end
             if rested == nil then return "0" end
             return readable(rested) and string.format("%.0f", rested) or "—"
         end
