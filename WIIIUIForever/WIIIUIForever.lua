@@ -65,6 +65,14 @@ local function fade(region)
     end
 end
 
+local function hasCustomNativePosition(frame)
+    return frame and type(frame.IsInDefaultPosition) == "function" and frame:IsInDefaultPosition() == false
+end
+
+local function isIndependentNativeControl(frame)
+    return frame == PetActionBar or frame == StanceBar or frame == PlayerCastingBarFrame or frame == PetFrame
+end
+
 local function restoreLayout()
     if not next(original) then
         return
@@ -74,13 +82,17 @@ local function restoreLayout()
         TotemFrame:SetParent(minionTrackerState.parent)
     end
     for frame, state in pairs(original) do
-        frame:SetScale(state.scale)
-        if state.width then
-            frame:SetSize(state.width, state.height)
-        end
-        frame:ClearAllPoints()
-        for _, point in ipairs(state.points) do
-            frame:SetPoint(unpack(point, 1, 5))
+        -- A native Edit Mode save may have replaced our defaults since this
+        -- snapshot was taken. Never restore stale anchors over that choice.
+        if not (isIndependentNativeControl(frame) and hasCustomNativePosition(frame)) then
+            frame:SetScale(state.scale)
+            if state.width then
+                frame:SetSize(state.width, state.height)
+            end
+            frame:ClearAllPoints()
+            for _, point in ipairs(state.points) do
+                frame:SetPoint(unpack(point, 1, 5))
+            end
         end
     end
     for region, alpha in pairs(faded) do
@@ -95,7 +107,7 @@ local function restoreLayout()
     end
     if petFrameDetached then
         petFrameDetached = false
-        PetFrame:ApplySystemAnchor()
+        if not hasCustomNativePosition(PetFrame) then PetFrame:ApplySystemAnchor() end
     end
     if tooltipClamped ~= nil then
         GameTooltip:SetClampedToScreen(tooltipClamped)
@@ -138,6 +150,15 @@ local function fit(frame, x, y, width, height, point)
     local fitScale = math.min(width / frame:GetWidth(), height / frame:GetHeight())
     setScale(frame, scale * fitScale)
     place(frame, x, y, point)
+end
+
+local function fitNativeDefault(frame, ...)
+    if hasCustomNativePosition(frame) then
+        -- Native Edit Mode owns both the anchor and scale after a move.
+        original[frame] = nil
+        return
+    end
+    fit(frame, ...)
 end
 
 local queueLayout
@@ -312,9 +333,9 @@ local function placeActionBars(dx, dy, themedExperience, stockJoin)
     fitActionRow(MultiBarBottomRight, dx, dy + grid.rowHeight * 2 + 1)
     placeTrackingBar(MainStatusTrackingBarContainer, center, dy + 143, themedExperience)
     placeTrackingBar(SecondaryStatusTrackingBarContainer, center, dy + 155, themedExperience)
-    fit(PetActionBar, x, dy + 192, 300, 28)
-    fit(StanceBar, x, dy + 226, 300, 28)
-    fit(PlayerCastingBarFrame, center, dy + 260, 186, 19, "BOTTOM")
+    fitNativeDefault(PetActionBar, x, dy + 192, 300, 28)
+    fitNativeDefault(StanceBar, x, dy + 226, 300, 28)
+    fitNativeDefault(PlayerCastingBarFrame, center, dy + 260, 186, 19, "BOTTOM")
 end
 
 local function placeSideBars(width, height)
@@ -362,6 +383,11 @@ end
 
 local function placePetFrame(dx)
     if not PetFrame then return end
+    if hasCustomNativePosition(PetFrame) then
+        original[PetFrame] = nil
+        petFrameDetached = false
+        return
+    end
     -- The default pet frame is managed under PlayerFrame. The native manager
     -- can move it below that frame again when pet or totem visibility changes.
     if PetFrame.isManagedFrame and PetFrame.BreakFromFrameManager and PetFrame.ApplySystemAnchor
@@ -461,7 +487,7 @@ local function applyLayoutNow()
         else
             remember(PlayerFrame)
             anchor(PlayerFrame, "TOPLEFT", UIParent, "TOPLEFT", 22, -25)
-            if PetFrame then
+            if PetFrame and not hasCustomNativePosition(PetFrame) then
                 remember(PetFrame)
                 anchor(PetFrame, "TOPLEFT", PlayerFrame, "BOTTOMLEFT", 24, 0)
             end
@@ -1120,6 +1146,7 @@ events:SetScript("OnEvent", function(_, event, ...)
             return
         elseif event == "BAG_UPDATE_DELAYED" or event == "UNIT_INVENTORY_CHANGED" then
             addon.UpdateProfileStats(console, "ammo")
+            addon.UpdateProfileStats(console, "soulShards")
             addon.UpdateProfileStats(console, "armor")
             return
         elseif event == "DAMAGE_METER_RESET" then

@@ -1,4 +1,4 @@
-WIIIUI Forever 0.7.0-beta1 - Beta
+WIIIUI Forever 0.7.0-beta3 - Beta V3
 
 A Warcraft III-inspired interface reimagined for WoW Forever.
 Target: Forever 1.60.1, Interface 16001. Other clients are not currently tested.
@@ -13,6 +13,13 @@ CONFIGURE
 Use the cog above chat, or /wiiiui human, orc, undead, or nightelf.
 /wiiiui off restores the native layout; /wiiiui on enables the console.
 Additional action bars are enabled in WoW's own Action Bars settings.
+Move pet controls, stance/aura/stealth bars, the pet portrait, and the cast bar
+in Esc > Edit Mode > WIIIUI Forever Bars, then Save. Custom positions are kept.
+Drag the Character window title bar on any tab outside combat. Its saved
+position is shared across tabs; the default position is on the left.
+Choose Soul Shards in Cog > Character panel > a stat slot to show the count
+carried in your bags. Combat stats retain their last readable value if
+combat data is unavailable; the tooltip identifies those cached values.
 The optional six-slot panel accepts dragged spells and items outside combat.
 Open Settings > AddOns > WIIIUI Forever > Console layout to reorder or remove
 whole boxes. The faction borders follow the boxes. Layouts save per character.

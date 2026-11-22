@@ -1,19 +1,21 @@
-# WIIIUI Forever
+# WIIIUI Forever — Beta V3
 
 ### Bring the Warcraft III command console into World of Warcraft: Forever.
 
 **Four faction-inspired interfaces. Animated character portraits. A customizable HUD. One familiar Warcraft III feeling.**
 
-[![Version](https://img.shields.io/badge/version-0.7.0%20beta-yellow)](https://github.com/Hmimesh/WIIIUIForever)
+[![Version](https://img.shields.io/badge/version-0.7.0--beta3-yellow)](https://github.com/Hmimesh/WIIIUIForever)
 [![Client](https://img.shields.io/badge/client-WoW%20Forever-blue)](https://github.com/Hmimesh/WIIIUIForever)
 [![Interface](https://img.shields.io/badge/interface-16001-informational)](https://github.com/Hmimesh/WIIIUIForever)
 [![Issues](https://img.shields.io/github/issues/Hmimesh/WIIIUIForever)](https://github.com/Hmimesh/WIIIUIForever/issues)
 
 WIIIUI Forever reimagines [Fiur's original WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI) for the **WoW Forever** client. It frames WoW's native controls in Warcraft III-inspired faction consoles, adds practical customization, and gives your character screen a classic strategy-game look.
 
-> **Beta — v0.7.0-beta1.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
+> **Beta V3 — v0.7.0-beta3.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
 
-The first public beta includes movable console boxes, four matching window themes, a four-panel Character window, and optional full character names. See the [changelog](WIIIUIForever/CHANGELOG.txt).
+**[Download Beta V3](https://github.com/Hmimesh/WIIIUIForever/releases/download/v0.7.0-beta3/WIIIUIForever-0.7.0-beta3.zip)** · **[Release notes](docs/RELEASE-NOTES-0.7.0-beta3.md)**
+
+Beta V3 adds title-bar dragging on every Character window tab, consistent saved window positions, a Soul Shards stat, and combat-stat continuity. Pet and class controls now respect your custom Edit Mode positions. See the [changelog](WIIIUIForever/CHANGELOG.txt).
 
 <p align="center">
   <img src="docs/screenshots/orc-theme-borders.png" alt="Orc console with refined wood and metal borders" width="49%">
@@ -31,7 +33,7 @@ The first public beta includes movable console boxes, four matching window theme
 | **Full character names** | Optionally show your first name and surname on the HUD and Character window. |
 | **Animated portrait** | Character portrait with per-character camera positioning and reset controls. |
 | **Native WoW controls** | Action bars, chat, and minimap arranged in the console; a separate Edit Mode layout preserves your previous arrangement. |
-| **Custom stat display** | Four selectable slots for damage, armor, ammo, DPS, crit, spell/healing details, rested XP, and more. |
+| **Custom stat display** | Four selectable slots for damage, armor, ammo, Soul Shards, DPS, crit, spell/healing details, rested XP, and more. |
 | **Six quick slots** | An optional item/spell panel that remembers assignments when hidden. |
 | **Restyled XP bar** | Level progress, rested segment, and hover details. |
 | **Session ribbon** | XP/hour, gold earned, gold/hour, session length, time-to-level estimate, and more, plus an optional day/night clock. |
@@ -76,7 +78,7 @@ PvP and combat indicators can use icons, text, or both, with configurable stylin
 
 ![Forsaken Kingdom-style character sheet and carried bags](docs/screenshots/forsaken-character-sheet.png)
 
-Browse talents and statistics beside your model, equipment, and inventory. Move the Character window and inventory separately. Display all carried bags, the backpack, an individual bag, or no inventory panel.
+Browse talents and statistics beside your model, equipment, and inventory. Drag the Character title bar on any tab; its saved position is shared across tabs. Move the inventory separately. Display all carried bags, the backpack, an individual bag, or no inventory panel.
 
 ### Make it your own
 
@@ -86,8 +88,8 @@ Use the **cog above chat** to adjust themes, stat slots, portrait framing, healt
 
 ## Installation
 
-1. Extract the CurseForge addon ZIP. For a GitHub source download, click **Code → Download ZIP** and extract the archive.
-2. From the extracted repository, copy **only the inner `WIIIUIForever` folder** into your Forever client's addon directory:
+1. [Download the Beta V3 addon ZIP](https://github.com/Hmimesh/WIIIUIForever/releases/download/v0.7.0-beta3/WIIIUIForever-0.7.0-beta3.zip) and extract it. For a GitHub source download, click **Code → Download ZIP** and extract the archive.
+2. From the extracted archive, copy **only the `WIIIUIForever` folder** into your Forever client's addon directory:
 
    ```text
    World of Warcraft/

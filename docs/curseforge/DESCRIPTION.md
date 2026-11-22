@@ -2,7 +2,7 @@
 
 Bring a Warcraft III-style command console to World of Warcraft: Forever.
 
-**Beta: 0.7.0-beta1.** Built for **Forever 1.60.1 / Interface 16001**. Other WoW clients are not currently supported or tested. Bug reports, ideas, and contributions are welcome.
+**Beta V3: 0.7.0-beta3.** Built for **Forever 1.60.1 / Interface 16001**. Other WoW clients are not currently supported or tested. Bug reports, ideas, and contributions are welcome.
 
 ## Choose your console
 
@@ -15,7 +15,7 @@ The console arranges WoW's native action bars, minimap, chat, and menus inside f
 - Reorder or hide whole console boxes in Settings > AddOns > WIIIUI Forever. Faction borders follow their new positions, with layouts saved per character.
 - Optional first name and surname on the HUD and Character window.
 - Animated player portrait with per-character framing, camera lock, reset, and reapply controls.
-- Four selectable character stats, including weapon damage, armor, ammo, melee or ranged DPS, crit, spell/healing information, rested XP, combat DPS, and the highest-damage ability.
+- Four selectable character stats, including weapon damage, armor, ammo, Soul Shards, melee or ranged DPS, crit, spell/healing information, rested XP, combat DPS, and the highest-damage ability.
 - Equipment-aware icons for supported stats. Combat statistics use Forever's native damage meter and reset for each fight.
 - Health and resource text shown as numbers, percentages, both, or neither.
 - XP bar with a rested-XP segment and hover details.
@@ -23,7 +23,9 @@ The console arranges WoW's native action bars, minimap, chat, and menus inside f
 - Configurable PvP and combat indicators, with icons, text, styling, and visibility options.
 - Session ribbon with selectable XP/hour, gold gained, gold/hour, session time, time-to-level, and other metrics, plus an optional day/night clock.
 - A four-panel Character window for talents, statistics, model/equipment, and inventory, with matching Human, Orc, Forsaken, or Night Elf artwork. The themed window is available in combat. Move the Character window and inventory separately, and choose all carried bags, the backpack, an individual bag, or no inventory panel.
-- Pet controls, class quick bars, and round minion trackers placed above the HUD.
+- Pet controls and class quick bars default above the HUD; custom Edit Mode positions and sizes are respected for pet controls, stances, stealth, auras, the pet portrait, and the cast bar. Round minion trackers sit above the character HUD.
+- Drag the Character window title bar on any tab, with the same saved position across tabs and a left-side default.
+- HUD stats keep their last readable value when combat data is unavailable, identified in the tooltip.
 - Square minimap with coordinates, zone/time display, and supported addon buttons arranged above it.
 
 No companion addons are required. MoveAnything and the original WIIIUI do not need to be installed.

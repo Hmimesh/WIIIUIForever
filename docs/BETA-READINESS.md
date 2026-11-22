@@ -1,6 +1,6 @@
 # WIIIUI Forever beta readiness
 
-Updated 2026-11-19 for the local `0.7.0-beta1` candidate on Forever 1.60.1 (Interface 16001).
+Updated 2026-11-22 for the local `0.7.0-beta3` candidate on Forever 1.60.1 (Interface 16001).
 
 This is a proposed acceptance checklist, not a statement that every test below has passed. The current feature set is sufficient for a beta. Prioritize predictable installation, gameplay, saved settings, and recovery before adding features.
 
@@ -98,7 +98,7 @@ Pass condition: no obvious addon-caused stutter, runaway work, or known gameplay
 - [x] Apply **CC BY 4.0** to the original implementation and document the third-party exclusions in the repository and packaged license.
 - [ ] Match the license in the repository, packaged notice, listing description, and CurseForge project field.
 - [ ] Confirm redistribution permission or an applicable license for the upstream material and artwork included in a CurseForge upload. See [the submission notes](curseforge/SUBMISSION.md) and [CurseForge's moderation policy](https://support.curseforge.com/support/solutions/articles/9000197279-project-and-modpack-moderation-policies).
-- [x] Match the public README, release notes, and listing to the `0.7.0-beta1` TOC version and ZIP filename.
+- [x] Match the public README, release notes, and listing to the `0.7.0-beta3` TOC version and ZIP filename.
 - [x] Adapt the submission-kit builder for Beta and validate release type against the version.
 - [x] Update the contribution guide and release notes, keeping precise known limitations.
 - [ ] Build and verify a ZIP containing only the installable addon folder and matching TOC, assets, and license files.

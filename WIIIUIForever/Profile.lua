@@ -139,23 +139,22 @@ local function readFightDps(previous)
 end
 
 local stats = {
-    damage = { label = "Damage", icon = "INV_Misc_MonsterClaw_02", read = function()
+    damage = { label = "Damage", icon = "INV_Misc_MonsterClaw_02", cacheInCombat = true, read = function()
         local low, high = UnitDamage("player")
         if readableNumber(low) and readableNumber(high) then
             return string.format("%d–%d", math.max(math.floor(low), 1), math.max(math.ceil(high), 1))
         end
     end },
-    spell = { label = "Spell", name = "Spell damage", icon = "Spell_Nature_Lightning", read = function()
+    spell = { label = "Spell", name = "Spell damage", icon = "Spell_Nature_Lightning", cacheInCombat = true, read = function()
         local highest
         for school = 2, MAX_SPELL_SCHOOLS or 7 do
             local bonus = GetSpellBonusDamage(school)
-            if readableNumber(bonus) then
-                highest = math.max(highest or bonus, bonus)
-            end
+            if not readableNumber(bonus) then return end
+            highest = math.max(highest or bonus, bonus)
         end
         return highest
     end },
-    armor = { label = "Armor", name = "Armor reduction", icon = "INV_Chest_Chain_05", read = function()
+    armor = { label = "Armor", name = "Armor reduction", icon = "INV_Chest_Chain_05", cacheInCombat = true, read = function()
         local _, armor = UnitArmor("player")
         local level = UnitLevel("player")
         if readableNumber(armor) and readableNumber(level) and level > 0 then
@@ -166,11 +165,11 @@ local stats = {
         end
         return nil, equipmentIcon("ChestSlot")
     end },
-    healing = { label = "Healing", name = "Bonus healing", icon = "Spell_Holy_Heal", read = function()
+    healing = { label = "Healing", name = "Bonus healing", icon = "Spell_Holy_Heal", cacheInCombat = true, read = function()
         local bonus = GetSpellBonusHealing()
         return readableNumber(bonus) and bonus or nil
     end },
-    ammo = { label = "Ammo", name = "Equipped ammo", icon = "INV_Ammo_Arrow_01", read = function()
+    ammo = { label = "Ammo", name = "Equipped ammo", icon = "INV_Ammo_Arrow_01", cacheInCombat = true, read = function()
         if not C_PaperDollInfo.AmmoNeeded() or not UnitUsesAmmo("player") then
             return
         end
@@ -189,12 +188,16 @@ local stats = {
         local icon = GetInventoryItemTexture("player", slot)
         return readableNumber(count) and count or nil, not issecretvalue(icon) and icon or nil
     end },
-    meleeDps = { label = "Melee DPS", name = "Main-hand weapon DPS", icon = "INV_Sword_04", read = function()
+    soulShards = { label = "Shards", name = "Soul Shards", icon = "INV_Misc_Gem_Amethyst_02", numeric = true, format = "%d",
+        description = "Soul Shards carried in your bags. Bank storage is not included.", read = function()
+            return C_Item.GetItemCount(6265, false, false, false, false)
+        end },
+    meleeDps = { label = "Melee DPS", name = "Main-hand weapon DPS", icon = "INV_Sword_04", cacheInCombat = true, read = function()
         local speed = UnitAttackSpeed("player")
         local low, high = UnitDamage("player")
         return weaponDps(speed, low, high), equipmentIcon("MainHandSlot")
     end },
-    rangedDps = { label = "Ranged DPS", name = "Ranged weapon DPS", icon = "INV_Weapon_Bow_07", read = function()
+    rangedDps = { label = "Ranged DPS", name = "Ranged weapon DPS", icon = "INV_Weapon_Bow_07", cacheInCombat = true, read = function()
         return weaponDps(UnitRangedDamage("player")), equipmentIcon("RangedSlot")
     end },
     fightDps = { label = "Fight DPS", name = "Last fight average DPS", icon = "Ability_DualWield", read = readFightDps },
@@ -207,7 +210,7 @@ local stats = {
             local snapshot = console.combatStats or {}
             return snapshot.abilityDps, snapshot.icon, snapshot.name, snapshot.spellID
         end },
-    crit = { label = "Crit", name = "Melee critical chance", icon = "Ability_CriticalStrike", read = function()
+    crit = { label = "Crit", name = "Melee critical chance", icon = "Ability_CriticalStrike", cacheInCombat = true, read = function()
         local chance = GetCritChance()
         return readableNumber(chance) and string.format("%.1f%%", chance) or nil, equipmentIcon("MainHandSlot")
     end },
@@ -218,7 +221,7 @@ local stats = {
         end
     end },
 }
-local statOrder = { "damage", "armor", "spell", "healing", "ammo", "meleeDps", "rangedDps", "combatDps", "topAbility", "fightDps", "crit", "restedXp" }
+local statOrder = { "damage", "armor", "spell", "healing", "ammo", "soulShards", "meleeDps", "rangedDps", "combatDps", "topAbility", "fightDps", "crit", "restedXp" }
 
 local function clearProfileTooltip(owner)
     if GameTooltip:GetOwner() == owner then
@@ -378,6 +381,10 @@ function addon.CreateProfile(console, character)
             if key == "combatDps" or key == "topAbility" then
                 GameTooltip:AddLine("Damage per second in this combat session. Resets for the next fight.", 1, 1, 1, true)
             end
+            if stat.description then GameTooltip:AddLine(stat.description, 1, 1, 1, true) end
+            if widget.usingCachedValue then
+                GameTooltip:AddLine("Last readable value. Updates when combat data becomes available.", 1, 0.82, 0, true)
+            end
             GameTooltip:Show()
         end)
         hover:SetScript("OnLeave", clearProfileTooltip)
@@ -386,6 +393,7 @@ function addon.CreateProfile(console, character)
 end
 
 function addon.UpdateProfileStats(console, onlyStat)
+    console.profileStatCache = console.profileStatCache or {}
     for index, widget in ipairs(console.statSlots) do
         local key = console.profileStats[index]
         if not onlyStat or key == onlyStat then
@@ -393,6 +401,20 @@ function addon.UpdateProfileStats(console, onlyStat)
             local previous
             if not stat.numeric and widget.key == key then previous = widget.lastValue end
             local value, icon, label, spellID = stat.read(previous, console)
+            widget.usingCachedValue = false
+            if stat.cacheInCombat then
+                local snapshot = console.profileStatCache[key]
+                if value == nil and InCombatLockdown() and snapshot then
+                    -- Keep only this stat's last public result, including its
+                    -- matching icon. Never calculate with restricted values.
+                    value, icon = snapshot.value, snapshot.icon
+                    widget.usingCachedValue = true
+                elseif value ~= nil then
+                    console.profileStatCache[key] = { value = value, icon = icon }
+                elseif not InCombatLockdown() then
+                    console.profileStatCache[key] = nil
+                end
+            end
             widget.key, widget.lastValue = key, value
             widget.spellID = spellID
             if issecretvalue(label) or label ~= nil then
@@ -401,7 +423,7 @@ function addon.UpdateProfileStats(console, onlyStat)
                 widget.label:SetText(stat.label)
             end
             if stat.numeric and (issecretvalue(value) or type(value) == "number") then
-                widget.value:SetFormattedText("%.1f", value)
+                widget.value:SetFormattedText(stat.format or "%.1f", value)
             else
                 widget.value:SetText(value == nil and "—" or tostring(value))
             end

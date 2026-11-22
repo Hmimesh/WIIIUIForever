@@ -342,7 +342,7 @@ function addon.SetupCharacterSheet(settings, character)
         end
     end
 
-    local function restore()
+    local function restore(keepOriginal)
         if not original then
             return
         end
@@ -353,16 +353,33 @@ function addon.SetupCharacterSheet(settings, character)
         for texture, alpha in pairs(original.alphas) do
             texture:SetAlpha(alpha)
         end
-        original = nil
+        if not keepOriginal then original = nil end
+    end
+
+    local function isSheetShown()
+        return settings.enabled and settings.forsakenSheet ~= false
+            and sheet:IsShown() and not InputUtil.IsGamepadUIEnabled()
     end
 
     local function isCharacterPageShown()
-        return settings.enabled and settings.forsakenSheet ~= false
-            and sheet:IsShown() and PaperDollFrame:IsShown() and not InputUtil.IsGamepadUIEnabled()
+        return isSheetShown() and PaperDollFrame:IsShown()
     end
 
+    local defaultPosition = { x = 16, y = 34 }
     local function refreshLayout()
-        if not original or moving or not isCharacterPageShown() or not canChangeLayout() then
+        if not original or moving or not isSheetShown() or not canChangeLayout() then
+            return
+        end
+        if not PaperDollFrame:IsShown() then
+            -- Reputation, skills and the other native pages share the saved
+            -- top-left position, without retaining the four-panel contents.
+            restore(true)
+            local width, height = sheet:GetSize()
+            local scale = math.min(original.scale, math.max(1, UIParent:GetHeight() - 178) / height,
+                math.max(1, UIParent:GetWidth() - 78) / width)
+            sheet:SetScale(scale)
+            sheet:SetClampedToScreen(true)
+            placeAtSavedPosition(sheet, character.sheetPosition or defaultPosition, width + 64, height)
             return
         end
         local detached = character.backpackPosition
@@ -385,13 +402,7 @@ function addon.SetupCharacterSheet(settings, character)
         local availableWidth = math.max(1, UIParent:GetWidth() - 78)
         local scale = math.min(original.scale, availableHeight / combinedHeight, availableWidth / sheetWidth)
         sheet:SetScale(scale)
-        if character.sheetPosition then
-            placeAtSavedPosition(sheet, character.sheetPosition, sheetWidth + 64, combinedHeight)
-        else
-            sheet:ClearAllPoints()
-            local overhang = math.max(0, sheetWidth - sheet:GetWidth())
-            sheet:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -68 / scale - overhang, -34 / scale)
-        end
+        placeAtSavedPosition(sheet, character.sheetPosition or defaultPosition, sheetWidth + 64, combinedHeight)
         if detached then
             placeAtSavedPosition(backpack, detached, backpack:GetSize())
         else
@@ -421,12 +432,20 @@ function addon.SetupCharacterSheet(settings, character)
         handle:SetScript("OnHide", function()
             stopDragging(frame, key, userPlaced)
         end)
+        return handle
     end
     addDragHandle(border, sheet, "sheetPosition", 60, 40, -1, 24)
     addDragHandle(backpack, backpack, "backpackPosition", 12, 230, -7, 28)
+    -- The themed title is hidden on native pages such as Reputation and
+    -- Skills. Give their shared header its own handle, clear of the portrait
+    -- and close button, and save to the same per-character position.
+    local nativeTitleDrag = addDragHandle(sheet, sheet, "sheetPosition", 60, 44, -4, 28)
+    nativeTitleDrag:SetFrameLevel(sheet:GetFrameLevel() + 10)
+    nativeTitleDrag:Hide()
 
     local function refresh()
-        local enabled = isCharacterPageShown()
+        local enabled = isSheetShown()
+        nativeTitleDrag:SetShown(enabled and not PaperDollFrame:IsShown())
         local canChange = canChangeLayout()
         -- A hidden parent already hides the whole board. Keep the existing
         -- layout available on reopen if a protected frame prevents a reset.
@@ -445,9 +464,17 @@ function addon.SetupCharacterSheet(settings, character)
             original = { scale = sheet:GetScale(), clamped = sheet:IsClampedToScreen(), points = rememberPoints(sheet), alphas = {} }
             for _, texture in pairs(backgrounds) do
                 original.alphas[texture] = texture:GetAlpha()
-                texture:SetAlpha(0)
             end
         end
+        if not isCharacterPageShown() then
+            trim:Hide()
+            stone:Hide()
+            backpack:Hide()
+            if talentsPanel then talentsPanel:Hide(); statsPanel:Hide() end
+            refreshLayout()
+            return
+        end
+        for texture in pairs(original.alphas) do texture:SetAlpha(0) end
         local view = inventoryView()
         if view ~= "hidden" then
             updateBackpack(view)
@@ -489,7 +516,7 @@ function addon.SetupCharacterSheet(settings, character)
     hooksecurefunc(sheet, "RefreshDisplay", refresh)
     hooksecurefunc("UpdateUIPanelPositions", refreshLayout)
     hooksecurefunc("ShowUIPanel", function(frame)
-        if frame == sheet and trim:IsShown() then
+        if frame == sheet and isSheetShown() then
             refreshLayout()
         end
     end)
