@@ -32,7 +32,8 @@ local themes = {
     orc = {
         label = "Orc",
         detachedPortraitHeight = 136,
-        mapButtons = { x = 166, 134, 112, 89, 67, 37 },
+        -- The round recess is centered at texture y=432: (512 - 432) / 2.
+        mapButtons = { x = 166, 134, 112, 89, 67, 40 },
         -- Start beyond the first clamp; the original clamp inside the span
         -- supplies the joint without reflecting the bolts or metal grain.
         rail = { 512, 64, 137, 17, 510, 64 },

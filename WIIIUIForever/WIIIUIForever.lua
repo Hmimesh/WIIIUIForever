@@ -201,7 +201,9 @@ local function placeMinimap(dx)
     fit(GameTimeFrame, buttons.x + dx, buttons[2], 18, 17, "CENTER")
     fit(AddonCompartmentFrame, buttons.x + dx, buttons[3], 18, 17, "CENTER")
     fit(cluster.IndicatorFrame, buttons.x + dx, buttons[4], 18, 15, "CENTER")
-    fit(cluster.DielFrame, buttons.x + dx, buttons[5] + 5, 22, 22, "CENTER")
+    -- The fifth theme coordinate is the center of its button well; an extra
+    -- vertical offset lifts the sun/moon circle into the frame above it.
+    fit(cluster.DielFrame, buttons.x + dx, buttons[5], 22, 22, "CENTER")
 
     local icons = {}
     for _, child in ipairs({ Minimap:GetChildren() }) do
