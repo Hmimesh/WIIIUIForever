@@ -1,21 +1,21 @@
-# WIIIUI Forever — Beta V3
+# WIIIUI Forever — V1.0
 
 ### Bring the Warcraft III command console into World of Warcraft: Forever.
 
 **Four faction-inspired interfaces. Animated character portraits. A customizable HUD. One familiar Warcraft III feeling.**
 
-[![Version](https://img.shields.io/badge/version-0.7.0--beta3-yellow)](https://github.com/Hmimesh/WIIIUIForever)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](https://github.com/Hmimesh/WIIIUIForever)
 [![Client](https://img.shields.io/badge/client-WoW%20Forever-blue)](https://github.com/Hmimesh/WIIIUIForever)
 [![Interface](https://img.shields.io/badge/interface-16001-informational)](https://github.com/Hmimesh/WIIIUIForever)
 [![Issues](https://img.shields.io/github/issues/Hmimesh/WIIIUIForever)](https://github.com/Hmimesh/WIIIUIForever/issues)
 
 WIIIUI Forever reimagines [Fiur's original WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI) for the **WoW Forever** client. It frames WoW's native controls in Warcraft III-inspired faction consoles, adds practical customization, and gives your character screen a classic strategy-game look.
 
-> **Beta V3 — v0.7.0-beta3.** Made for **Forever 1.60.1 / Interface 16001**. Expect some rough edges. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
+> **V1.0 — First stable release (1.0.0).** Made for **Forever 1.60.1 / Interface 16001**. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
 
-**[Download Beta V3](https://github.com/Hmimesh/WIIIUIForever/releases/download/v0.7.0-beta3/WIIIUIForever-0.7.0-beta3.zip)** · **[Release notes](docs/RELEASE-NOTES-0.7.0-beta3.md)**
+**[Download V1.0](https://github.com/Hmimesh/WIIIUIForever/releases/download/v1.0.0/WIIIUIForever-1.0.0.zip)** · **[Release notes](docs/RELEASE-NOTES-1.0.0.md)**
 
-Beta V3 adds title-bar dragging on every Character window tab, consistent saved window positions, a Soul Shards stat, and combat-stat continuity. Pet and class controls now respect your custom Edit Mode positions. See the [changelog](WIIIUIForever/CHANGELOG.txt).
+V1.0 brings together the four faction themes, movable windows, customizable HUD, Soul Shard tracking, and saved Edit Mode positions for pet/class controls. The launch build also fits quick-inventory icons to their artwork and aligns the minimap sun/moon indicator. See the [changelog](WIIIUIForever/CHANGELOG.txt).
 
 <p align="center">
   <img src="docs/screenshots/orc-theme-borders.png" alt="Orc console with refined wood and metal borders" width="49%">
@@ -88,7 +88,7 @@ Use the **cog above chat** to adjust themes, stat slots, portrait framing, healt
 
 ## Installation
 
-1. [Download the Beta V3 addon ZIP](https://github.com/Hmimesh/WIIIUIForever/releases/download/v0.7.0-beta3/WIIIUIForever-0.7.0-beta3.zip) and extract it. For a GitHub source download, click **Code → Download ZIP** and extract the archive.
+1. [Download the V1.0 addon ZIP](https://github.com/Hmimesh/WIIIUIForever/releases/download/v1.0.0/WIIIUIForever-1.0.0.zip) and extract it. For a GitHub source download, click **Code → Download ZIP** and extract the archive.
 2. From the extracted archive, copy **only the `WIIIUIForever` folder** into your Forever client's addon directory:
 
    ```text
@@ -135,9 +135,9 @@ Some layout and quick-slot updates are protected during combat and will apply wh
 
 See **[CONFIGURATION.md](docs/CONFIGURATION.md)** for all settings and how they're saved.
 
-## Beta status and known limitations
+## Supported client and compatibility
 
-This project is actively evolving. Portrait framing, reload and appearance transitions, support across resolutions/UI scales, and compatibility with other UI addons are still being refined. Combat statistics require the native Forever damage meter.
+V1.0 targets WoW Forever 1.60.1 / Interface 16001. Combat statistics require the native Forever damage meter. Addons that replace or reposition the same native frames can affect the layout; include your addon list when reporting a conflict. Independent positioning of the micro menu and bag-button group is planned for a later patch.
 
 **Found a bug or have an idea?** [Open an issue](https://github.com/Hmimesh/WIIIUIForever/issues) with:
 

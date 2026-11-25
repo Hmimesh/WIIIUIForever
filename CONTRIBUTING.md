@@ -1,6 +1,6 @@
 # Contributing to WIIIUI Forever
 
-WIIIUI Forever is in beta. Bug reports, fixes, feature ideas, and testing on different races, classes, resolutions, and UI scales are welcome.
+WIIIUI Forever has reached its first stable release, V1.0. Bug reports, fixes, feature ideas, and testing on different races, classes, resolutions, and UI scales are welcome.
 
 ## Report a bug
 

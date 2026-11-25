@@ -1,3 +1,34 @@
+WIIIUI Forever 1.0.0 - V1.0 - First stable release
+
+2026-11-25 | Forever 1.60.1 | Interface 16001
+
+Changes since Beta V3
+- First stable release for World of Warcraft: Forever 1.60.1 (Interface 16001).
+- Fixed the six-slot quick inventory: item/spell icons now fit each faction's painted slot interiors, with corrected row spacing and matching click areas, highlights, and cooldowns.
+- Corrected minimap sun/moon alignment in all four themes, including the Orc artwork's round recess.
+- Includes movable Character windows on every tab, shared saved positions across tabs, independently movable inventory, combat-stat retention, Soul Shard tracking, and custom Edit Mode placement for class/pet controls, pet portraits, and the cast bar.
+
+Included in V1.0
+- Four Warcraft III-inspired themes: Human, Orc, Forsaken/Undead, and Night Elf, with matching Character and inventory artwork.
+- Reorder or hide whole HUD sections: minimap, character panel, action bars, six quick slots, and chat. Faction borders follow their positions, with layouts saved per character.
+- Four-panel Character window for talents, statistics, model/equipment, and inventory, with title-bar dragging on every tab and a left-side default.
+- Inventory views for all carried bags, backpack only, individual bags, or a hidden inventory panel.
+- Animated character portrait with per-character framing, camera lock, reset, and reapply controls.
+- Optional full character names, including surnames, on the HUD and Character window.
+- Four configurable HUD stats with equipment-aware icons, Soul Shards, and Forever's native combat-meter statistics. Cached combat values are identified in their tooltips.
+- Separate health/resource text options, XP hover details, and rested-XP progress.
+- Six quick slots for dragged items and spells, with saved assignments, counts, and cooldowns.
+- Movable class and pet controls through Edit Mode, plus configurable PvP/combat indicators.
+- Optional session ribbon with selectable session statistics and a Warcraft III-style day/night clock.
+- Square minimap with coordinates, zone/time information, and supported addon buttons arranged above it.
+- Shared WIIIUI Forever Bars Edit Mode layout and /wiiiui off to restore the previous native layout.
+- Integrated bug-report link in Settings > AddOns > WIIIUI Forever.
+
+No companion addons are required. Other WoW clients are not currently tested.
+Move windows and adjust protected layouts outside combat. Use Settings >
+AddOns > WIIIUI Forever for HUD layout/full names, and the cog above chat for
+display options. Move pet/class controls in Esc > Edit Mode, then Save.
+
 WIIIUI Forever 0.7.0-beta3 - Beta V3
 
 For World of Warcraft: Forever 1.60.1 (Interface 16001).

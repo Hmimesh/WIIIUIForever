@@ -450,7 +450,7 @@ local function applyLayoutNow()
     dockVisibility = visibility
     -- Creating the secure buttons also sets their anchors and attributes.
     if not quickSlots then
-        quickSlots = addon.CreateQuickSlots(character)
+        quickSlots = addon.CreateQuickSlots(character, settings.theme)
     end
     console:SetScale(scale)
     console:SetDockLayout(dock)
@@ -459,6 +459,7 @@ local function applyLayoutNow()
     console:SetQuickSlotsShown(character.quickSlotsEnabled ~= false)
     quickSlots:SetShown(showQuickSlots)
     if showQuickSlots then
+        quickSlots:SetTheme(settings.theme)
         setScale(quickSlots, scale)
         place(quickSlots, addon.quickSlots.x + dock.quick.dx, 0)
     end

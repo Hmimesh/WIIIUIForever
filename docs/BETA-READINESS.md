@@ -1,8 +1,16 @@
-# WIIIUI Forever beta readiness
+# WIIIUI Forever release readiness
 
-Updated 2026-11-22 for the local `0.7.0-beta3` candidate on Forever 1.60.1 (Interface 16001).
+Updated 2026-11-25 for **V1.0 (1.0.0)** on Forever 1.60.1 (Interface 16001).
 
-This is a proposed acceptance checklist, not a statement that every test below has passed. The current feature set is sufficient for a beta. Prioritize predictable installation, gameplay, saved settings, and recovery before adding features.
+## V1.0 QA sign-off
+
+- The maintainer reported that all testing and QA passed on 2026-11-25.
+- The reported remaining mismatch was attributed to a different addon.
+- The maintainer confirmed the final quick-inventory sizing fix and authorized the first V1.0 release.
+- Automated Lua, layout, combat, window, stat, minimap, and quick-slot checks and the standalone package verification accompany the release preparation.
+- Independent positioning of the micro menu and bag-button group is deferred to a later patch.
+
+The beta test plan below is retained for reference. Its individual checkboxes are the original planning record, not a current test-result log; the maintainer sign-off is recorded above. Exact tester hardware and class coverage were not supplied separately.
 
 ## What we already have
 

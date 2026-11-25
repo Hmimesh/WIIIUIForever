@@ -17,9 +17,9 @@
     "1.60.1"
   ],
   "interface": 16001,
-  "fileDisplayName": "WIIIUI Forever Beta V3 (0.7.0-beta3)",
-  "fileName": "WIIIUIForever-0.7.0-beta3.zip",
-  "releaseType": "Beta",
+  "fileDisplayName": "WIIIUI Forever V1.0 (1.0.0)",
+  "fileName": "WIIIUIForever-1.0.0.zip",
+  "releaseType": "Release",
   "sourceCommit": "HEAD",
   "sourceUrl": "https://github.com/Hmimesh/WIIIUIForever",
   "issuesUrl": "https://github.com/Hmimesh/WIIIUIForever/issues",

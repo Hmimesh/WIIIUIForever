@@ -5,7 +5,7 @@ local function validAssignment(value)
         and type(value.id) == "number" and value.id > 0 and value.id % 1 == 0
 end
 
-function addon.CreateQuickSlots(character)
+function addon.CreateQuickSlots(character, themeName)
     character.quickSlots = type(character.quickSlots) == "table" and character.quickSlots or {}
     local saved = character.quickSlots
     local holder = CreateFrame("Frame", nil, UIParent)
@@ -111,9 +111,6 @@ function addon.CreateQuickSlots(character)
     for index = 1, 6 do
         local button = CreateFrame("Button", "WIIIUIForeverQuickSlot" .. index, holder, "SecureActionButtonTemplate")
         button.slotIndex = index
-        button:SetSize(25, 25)
-        button:SetPoint("CENTER", holder, "BOTTOMLEFT", 20 + (index - 1) % 2 * 40,
-            96 - math.floor((index - 1) / 2) * 40)
         button:RegisterForClicks("AnyUp")
         button:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
         local icon = button:CreateTexture(nil, "ARTWORK")
@@ -145,6 +142,24 @@ function addon.CreateQuickSlots(character)
         end
         assign(button, saved[index])
     end
+
+    function holder:SetTheme(name)
+        if InCombatLockdown() then return false end
+        name = addon.themes[name] and name or "human"
+        if self.theme == name then return true end
+        local well = addon.themes[name].quickSlot
+        -- Measured interiors of the original 512px inventory sheets at half
+        -- size. All six icons cover their bag art without crossing the trim.
+        for index, button in ipairs(buttons) do
+            button:SetSize(well.size, well.size)
+            button:ClearAllPoints()
+            button:SetPoint("CENTER", self, "BOTTOMLEFT", well.x + (index - 1) % 2 * addon.quickSlots.columnStep,
+                well.y - math.floor((index - 1) / 2) * addon.quickSlots.rowStep)
+        end
+        self.theme = name
+        return true
+    end
+    holder:SetTheme(themeName)
 
     local events = CreateFrame("Frame")
     for _, event in ipairs({

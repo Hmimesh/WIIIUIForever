@@ -1,13 +1,13 @@
 # CurseForge preparation
 
-Prepared on 2026-11-22 for **0.7.0-beta3**, Beta V3. The build records the exact package source commit in the kit's `project.json` and `manifest.json`.
+Prepared on 2026-11-25 for **1.0.0**, V1.0, the first stable release. The build records the exact package source commit in the kit's `project.json` and `manifest.json`.
 
-Run `python tools/prepare-curseforge.py` from a commit containing the installable changes to build and verify the portable review kit at `dist/curseforge-0.7.0-beta3/`. It includes the addon ZIP, pasteable listing files, gallery images/captions, avatar candidate, and SHA-256 manifest. It never uploads anything or chooses a license.
+Run `python tools/prepare-curseforge.py` from a commit containing the installable changes to build and verify the portable review kit at `dist/curseforge-1.0.0/`. It includes the addon ZIP, pasteable listing files, gallery images/captions, avatar candidate, and SHA-256 manifest. It never uploads anything or chooses a license.
 
 ## Files ready for review
 
-- Addon upload: `../../dist/WIIIUIForever-0.7.0-beta3.zip`
-- SHA-256: generated alongside the archive as `WIIIUIForever-0.7.0-beta3.zip.sha256`, also included in the review kit
+- Addon upload: `../../dist/WIIIUIForever-1.0.0.zip`
+- SHA-256: generated alongside the archive as `WIIIUIForever-1.0.0.zip.sha256`, also included in the review kit
 - Fields: [project.json](project.json)
 - Pasteable description: [DESCRIPTION.md](DESCRIPTION.md)
 - File changelog: [CHANGELOG.md](CHANGELOG.md)
@@ -31,9 +31,9 @@ The ZIP contains only the installable `WIIIUIForever/` directory, including `WII
 3. Use the summary in `project.json`, the reviewed avatar, and `DESCRIPTION.md`. Do not copy the original WIIIUI description. Source and issue links point to this fork.
 4. Select CC BY 4.0 for original code, retaining the explicit third-party exclusions in the description and packaged license.
 5. Upload gallery images in `gallery.json`; they are actual maintainer-supplied screenshots. Retain the caveat about other addons/world visuals.
-6. Upload **only** `WIIIUIForever-0.7.0-beta3.zip` as the addon file. Do not upload the entire repository or the submission kit.
-7. File display name: WIIIUI Forever 0.7.0-beta3. Choose **Forever / 1.60.1** and **Beta**. Do not tag untested clients. No required dependencies are declared.
-8. Paste `CHANGELOG.md` as the file release notes and keep this build labeled Beta.
+6. Upload **only** `WIIIUIForever-1.0.0.zip` as the addon file. Do not upload the entire repository or the submission kit.
+7. File display name: WIIIUI Forever 1.0.0. Choose **Forever / 1.60.1** and **Release**. Do not tag untested clients. No required dependencies are declared.
+8. Paste `CHANGELOG.md` as the file release notes and keep this build labeled Release.
 9. Review the concrete listing and file fields before the final upload. Any account agreement requires the account owner's acceptance.
 
 ## Verification already performed
@@ -45,7 +45,7 @@ The ZIP contains only the installable `WIIIUIForever/` directory, including `WII
 - Standalone ZIP integrity, all installable file checksums, and TOC/icon/license references.
 - README links, version, credits, and screenshot integrity.
 
-Mock checks and current live screenshots do not establish compatibility with every race, resolution, UI scale, or other addon. The project remains beta.
+The maintainer reported gameplay testing and QA passed for the V1.0 launch. The automated checks and reported QA do not establish compatibility with every race, resolution, UI scale, or other addon.
 
 ## Policy references
 

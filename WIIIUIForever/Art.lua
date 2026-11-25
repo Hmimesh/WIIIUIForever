@@ -4,7 +4,7 @@ addon.artPath = "Interface\\AddOns\\" .. addonName .. "\\art\\"
 addon.width = 1440
 addon.grid = { x = 512, width = 480, rowHeight = 40 }
 addon.chat = { x = 1080, width = 360, height = 153 }
-addon.quickSlots = { x = 992, width = 88, height = 148 }
+addon.quickSlots = { x = 992, width = 88, height = 148, columnStep = 40, rowStep = 39 }
 addon.portrait = { x = 216, y = 28, width = 72, height = 77 }
 
 -- Pixel crops in the original WIIIUI TGA sheets. The four themes share
@@ -12,6 +12,7 @@ addon.portrait = { x = 216, y = 28, width = 72, height = 77 }
 local themes = {
     human = {
         label = "Human",
+        quickSlot = { x = 19.5, y = 96, size = 28 },
         mapButtons = { x = 166, 133, 111, 89, 66, 39 },
         -- Both ends fall in the low mortar course, between raised stones.
         rail = { 512, 64, 141, 15, 378, 56 },
@@ -31,6 +32,7 @@ local themes = {
     },
     orc = {
         label = "Orc",
+        quickSlot = { x = 19, y = 97, size = 30 },
         detachedPortraitHeight = 136,
         -- The round recess is centered at texture y=432: (512 - 432) / 2.
         mapButtons = { x = 166, 134, 112, 89, 67, 40 },
@@ -48,6 +50,7 @@ local themes = {
     },
     undead = {
         label = "Undead",
+        quickSlot = { x = 20, y = 97, size = 30 },
         mapButtons = { x = 166, 134, 112, 89, 67, 39 },
         rail = { 512, 64, 89, 1, 275, 52 },
         railStart = -8,
@@ -66,6 +69,7 @@ local themes = {
     },
     nightelf = {
         label = "Night Elf",
+        quickSlot = { x = 20.5, y = 96.5, size = 29 },
         mapButtons = { x = 166, 136, 114, 91, 69, 39 },
         rail = { 512, 128, 45, 50, 467, 128 },
         railStart = -25,

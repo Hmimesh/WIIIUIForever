@@ -1,4 +1,4 @@
-WIIIUI Forever 0.7.0-beta3 - Beta V3
+WIIIUI Forever 1.0.0 - V1.0 - First stable release
 
 A Warcraft III-inspired interface reimagined for WoW Forever.
 Target: Forever 1.60.1, Interface 16001. Other clients are not currently tested.
@@ -20,7 +20,8 @@ position is shared across tabs; the default position is on the left.
 Choose Soul Shards in Cog > Character panel > a stat slot to show the count
 carried in your bags. Combat stats retain their last readable value if
 combat data is unavailable; the tooltip identifies those cached values.
-The optional six-slot panel accepts dragged spells and items outside combat.
+The optional six-slot panel accepts dragged spells and items outside combat,
+with icon sizes, click areas and cooldowns fitted to each faction theme.
 Open Settings > AddOns > WIIIUI Forever > Console layout to reorder or remove
 whole boxes. The faction borders follow the boxes. Layouts save per character.
 Enable Show full character name in the same AddOns settings for first names
@@ -29,7 +30,7 @@ sit above the HUD. The themed Character window includes talents, statistics,
 model/equipment, and inventory panels. Protected layout changes wait until
 combat ends.
 
-BETA FEEDBACK
+FEEDBACK
 Use the bug icon under Settings > AddOns > WIIIUI Forever to get the GitHub
 issue link. Contributions and bug reports are welcome:
 https://github.com/Hmimesh/WIIIUIForever/issues

@@ -2,7 +2,7 @@
 
 Bring a Warcraft III-style command console to World of Warcraft: Forever.
 
-**Beta V3: 0.7.0-beta3.** Built for **Forever 1.60.1 / Interface 16001**. Other WoW clients are not currently supported or tested. Bug reports, ideas, and contributions are welcome.
+**V1.0: 1.0.0 — First stable release.** Built for **Forever 1.60.1 / Interface 16001**. Other WoW clients are not currently supported or tested. Bug reports, ideas, and contributions are welcome.
 
 ## Choose your console
 
@@ -19,7 +19,7 @@ The console arranges WoW's native action bars, minimap, chat, and menus inside f
 - Equipment-aware icons for supported stats. Combat statistics use Forever's native damage meter and reset for each fight.
 - Health and resource text shown as numbers, percentages, both, or neither.
 - XP bar with a rested-XP segment and hover details.
-- Optional six-slot item/spell panel between the action bars and chat. Hiding the panel retains your assignments.
+- Optional six-slot item/spell panel between the action bars and chat, with icon and cooldown sizes fitted to each faction theme. Hiding the panel retains your assignments.
 - Configurable PvP and combat indicators, with icons, text, styling, and visibility options.
 - Session ribbon with selectable XP/hour, gold gained, gold/hour, session time, time-to-level, and other metrics, plus an optional day/night clock.
 - A four-panel Character window for talents, statistics, model/equipment, and inventory, with matching Human, Orc, Forsaken, or Night Elf artwork. The themed window is available in combat. Move the Character window and inventory separately, and choose all carried bags, the backpack, an individual bag, or no inventory panel.
@@ -53,9 +53,9 @@ Open the cog above chat for display and theme controls. Open Settings > AddOns >
 
 `/wiiiui off` restores the native layout; `/wiiiui on` returns to the console. Protected layout and quick-slot changes wait until combat ends.
 
-## Beta feedback
+## Feedback and compatibility
 
-Portrait framing, appearance transitions, resolutions/UI scales, and compatibility with other UI addons are still being refined. Please include your addon/client versions, character race/class, theme, resolution, UI scale, reproduction steps, and the first Lua error when reporting an issue. Let us know whether it happens after login, a reload, leveling, combat, or an equipment change.
+Other addons that move or replace the same native frames can affect the layout. Please include your addon/client versions, character race/class, theme, resolution, UI scale, reproduction steps, and the first Lua error when reporting an issue. Let us know whether it happens after login, a reload, leveling, combat, or an equipment change.
 
 Screenshots in the gallery show the actual addon in game. Other addons and client world visuals visible in them are not included.
 
