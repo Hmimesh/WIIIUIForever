@@ -774,8 +774,14 @@ local function createPortraitBar(y)
     bar:SetSize(70, 9)
     bar:SetPoint("BOTTOMLEFT", panel, "BOTTOMLEFT", 217, y)
     bar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
-    local text = bar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    text:SetAllPoints()
+    -- Keep the readout above overlays such as incoming healing.
+    local textLayer = CreateFrame("Frame", nil, bar)
+    textLayer:SetAllPoints(bar)
+    textLayer:SetFrameLevel(bar:GetFrameLevel() + 3)
+    textLayer:EnableMouse(false)
+    bar.textLayer = textLayer
+    local text = textLayer:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    text:SetAllPoints(textLayer)
     text:SetFont(STANDARD_TEXT_FONT, 7, "OUTLINE")
     text:SetWordWrap(false)
     text:SetJustifyH("CENTER")
@@ -822,6 +828,7 @@ local function updateHealth()
     console.health:SetMinMaxValues(0, maximum)
     console.health:SetValue(current)
     updateBarText(console.health, character.healthText, current, maximum)
+    if console.healingFeedback then console.healingFeedback:UpdatePrediction() end
 end
 
 local function updatePower()
@@ -851,6 +858,7 @@ local function addBarTextMenu(menu)
             end, mode.key)
         end
     end
+    addon.AddHealingFeedbackMenu(textMenu, console)
 end
 
 local function selectTheme(theme)
@@ -929,6 +937,7 @@ local function initialize()
     console.health:SetStatusBarColor(0.20, 0.76, 0.14)
     console.power = createPortraitBar(3)
     addon.CreateProfile(console, character)
+    addon.SetupHealingFeedback(console, character)
 
     local gear = CreateFrame("Button", nil, console)
     console.gear = gear

@@ -1,3 +1,16 @@
+# WIIIUI Forever 1.1.0 — Talents and healing feedback
+
+**2026-11-27 · WoW Forever 1.60.1.71139 · Interface 16001**
+
+- Allocate talent points in Character > Talents, with native tree rows, prerequisite links, rank counts, and availability colours. Click available talents, then Apply to learn; Undo all discards pending changes while preserving learned talents. Editing follows native restrictions and is unavailable in combat.
+- Correct Hunter talent coordinates and row offsets, clamp scrolling after refreshes, and check point costs before marking talents available.
+- Preview incoming healing as a cyan segment after current HP, clamped to missing health and adjusted for heal absorbs. HP text stays above the bar, with the predicted amount above the portrait.
+- Show floating green healing-received numbers for self-heals and heals from other players, with larger critical heals.
+- Toggle the healing displays independently under Cog > Health and resource text > Healing feedback. Both default to enabled and save per character.
+- Reviewed compatibility with build 71139; Interface remains 16001. Existing HUD layouts, movable windows, class/pet controls, Soul Shard tracking, and quick-slot fixes are included.
+
+Lua regression checks passed. Gameplay testing after this game update remains pending.
+
 # WIIIUI Forever V1.0 (1.0.0) — First stable release
 
 **2026-11-25 · WoW Forever 1.60.1 · Interface 16001**

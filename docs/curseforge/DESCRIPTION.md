@@ -2,7 +2,7 @@
 
 Bring a Warcraft III-style command console to World of Warcraft: Forever.
 
-**V1.0: 1.0.0 — First stable release.** Built for **Forever 1.60.1 / Interface 16001**. Other WoW clients are not currently supported or tested. Bug reports, ideas, and contributions are welcome.
+**1.1.0 — Talents and healing feedback.** Built for **Forever 1.60.1.71139 / Interface 16001**. Other WoW clients are not currently supported or tested. Bug reports, ideas, and contributions are welcome.
 
 ## Choose your console
 
@@ -18,6 +18,8 @@ The console arranges WoW's native action bars, minimap, chat, and menus inside f
 - Four selectable character stats, including weapon damage, armor, ammo, Soul Shards, melee or ranged DPS, crit, spell/healing information, rested XP, combat DPS, and the highest-damage ability.
 - Equipment-aware icons for supported stats. Combat statistics use Forever's native damage meter and reset for each fight.
 - Health and resource text shown as numbers, percentages, both, or neither.
+- Incoming healing shown as a cyan segment after current HP, clamped to missing health and adjusted for heal absorbs, with readable HP text above it. Floating green numbers show healing received, with larger text for critical heals. Toggle the two displays separately under Cog > Health and resource text > Healing feedback; choices save per character.
+- Allocate talent points directly in Character > Talents, with native tree rows, prerequisites, ranks, and availability colours. Click available talents and Apply to learn them; Undo all clears pending changes while preserving learned talents. Native restrictions and combat locks apply.
 - XP bar with a rested-XP segment and hover details.
 - Optional six-slot item/spell panel between the action bars and chat, with icon and cooldown sizes fitted to each faction theme. Hiding the panel retains your assignments.
 - Configurable PvP and combat indicators, with icons, text, styling, and visibility options.

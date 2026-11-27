@@ -1,7 +1,7 @@
-WIIIUI Forever 1.0.0 - V1.0 - First stable release
+WIIIUI Forever 1.1.0 - Talents and healing feedback
 
 A Warcraft III-inspired interface reimagined for WoW Forever.
-Target: Forever 1.60.1, Interface 16001. Other clients are not currently tested.
+Target: Forever 1.60.1.71139, Interface 16001. Other clients are not currently tested.
 
 INSTALL
 Extract the WIIIUIForever folder into:
@@ -10,6 +10,9 @@ The WIIIUIForever.toc file must be directly inside that folder.
 Restart the client if installing for the first time. Enable WIIIUI Forever.
 
 CONFIGURE
+Incoming healing previews and floating healing-received numbers are on by
+default. Toggle them separately in Cog > Health and resource text > Healing
+feedback. The choices save per character.
 Use the cog above chat, or /wiiiui human, orc, undead, or nightelf.
 /wiiiui off restores the native layout; /wiiiui on enables the console.
 Additional action bars are enabled in WoW's own Action Bars settings.
@@ -17,6 +20,12 @@ Move pet controls, stance/aura/stealth bars, the pet portrait, and the cast bar
 in Esc > Edit Mode > WIIIUI Forever Bars, then Save. Custom positions are kept.
 Drag the Character window title bar on any tab outside combat. Its saved
 position is shared across tabs; the default position is on the left.
+In the Character window's Talents panel, choose a tree and click available
+talents to allocate points. Apply learns the pending talents; Undo all discards
+all pending changes, including changes in the full talent tree. Learned talents
+are kept. Rows, gaps, and prerequisite links follow the native talent trees.
+Talent editing is unavailable in combat. Open talent tree remains available
+for the full view and choice talents.
 Choose Soul Shards in Cog > Character panel > a stat slot to show the count
 carried in your bags. Combat stats retain their last readable value if
 combat data is unavailable; the tooltip identifies those cached values.

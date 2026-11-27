@@ -1,21 +1,21 @@
-# WIIIUI Forever — V1.0
+# WIIIUI Forever — 1.1.0
 
 ### Bring the Warcraft III command console into World of Warcraft: Forever.
 
 **Four faction-inspired interfaces. Animated character portraits. A customizable HUD. One familiar Warcraft III feeling.**
 
-[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)](https://github.com/Hmimesh/WIIIUIForever)
+[![Version](https://img.shields.io/badge/version-1.1.0-brightgreen)](https://github.com/Hmimesh/WIIIUIForever)
 [![Client](https://img.shields.io/badge/client-WoW%20Forever-blue)](https://github.com/Hmimesh/WIIIUIForever)
 [![Interface](https://img.shields.io/badge/interface-16001-informational)](https://github.com/Hmimesh/WIIIUIForever)
 [![Issues](https://img.shields.io/github/issues/Hmimesh/WIIIUIForever)](https://github.com/Hmimesh/WIIIUIForever/issues)
 
 WIIIUI Forever reimagines [Fiur's original WIIIUI](https://github.com/Fiurs-Hearth/WIIIUI) for the **WoW Forever** client. It frames WoW's native controls in Warcraft III-inspired faction consoles, adds practical customization, and gives your character screen a classic strategy-game look.
 
-> **V1.0 — First stable release (1.0.0).** Made for **Forever 1.60.1 / Interface 16001**. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
+> **1.1.0 — Talents and healing feedback.** Made for **Forever 1.60.1.71139 / Interface 16001**. Other WoW clients are **not** currently supported or tested. Contributions and bug reports are welcome.
 
-**[Download V1.0](https://github.com/Hmimesh/WIIIUIForever/releases/download/v1.0.0/WIIIUIForever-1.0.0.zip)** · **[Release notes](docs/RELEASE-NOTES-1.0.0.md)**
+**[Download 1.1.0](https://github.com/Hmimesh/WIIIUIForever/releases/download/v1.1.0/WIIIUIForever-1.1.0.zip)** · **[Release notes](docs/RELEASE-NOTES-1.1.0.md)**
 
-V1.0 brings together the four faction themes, movable windows, customizable HUD, Soul Shard tracking, and saved Edit Mode positions for pet/class controls. The launch build also fits quick-inventory icons to their artwork and aligns the minimap sun/moon indicator. See the [changelog](WIIIUIForever/CHANGELOG.txt).
+1.1.0 adds point allocation in the Character window's talent trees, cyan incoming-healing previews, and floating healing-received numbers. It includes the four faction themes, movable windows, customizable HUD, Soul Shard tracking, fitted quick-inventory icons, aligned minimap clock, and saved Edit Mode positions for pet/class controls. See the [changelog](WIIIUIForever/CHANGELOG.txt).
 
 <p align="center">
   <img src="docs/screenshots/orc-theme-borders.png" alt="Orc console with refined wood and metal borders" width="49%">
@@ -38,6 +38,8 @@ V1.0 brings together the four faction themes, movable windows, customizable HUD,
 | **Restyled XP bar** | Level progress, rested segment, and hover details. |
 | **Session ribbon** | XP/hour, gold earned, gold/hour, session length, time-to-level estimate, and more, plus an optional day/night clock. |
 | **Character and inventory windows** | Four panels for talents, statistics, model/equipment, and inventory, with matching Human, Orc, Forsaken, and Night Elf artwork. |
+| **Talent point allocation** | Native tree rows, prerequisites, and ranks; click available talents, then Apply, or Undo all to discard pending changes. |
+| **Healing feedback** | Cyan incoming-heal preview and floating green healing-received numbers, with separate per-character toggles. |
 | **Combat and PvP indicators** | Configurable indicator styles and visibility; combat statistics use Forever's native damage meter. |
 
 No required companion addons. No MoveAnything or original WIIIUI installation needed.
@@ -88,7 +90,7 @@ Use the **cog above chat** to adjust themes, stat slots, portrait framing, healt
 
 ## Installation
 
-1. [Download the V1.0 addon ZIP](https://github.com/Hmimesh/WIIIUIForever/releases/download/v1.0.0/WIIIUIForever-1.0.0.zip) and extract it. For a GitHub source download, click **Code → Download ZIP** and extract the archive.
+1. [Download the 1.1.0 addon ZIP](https://github.com/Hmimesh/WIIIUIForever/releases/download/v1.1.0/WIIIUIForever-1.1.0.zip) and extract it. For a GitHub source download, click **Code → Download ZIP** and extract the archive.
 2. From the extracted archive, copy **only the `WIIIUIForever` folder** into your Forever client's addon directory:
 
    ```text
@@ -127,6 +129,8 @@ Some layout and quick-slot updates are protected during combat and will apply wh
 
 - **Portrait:** X/Y/Z framing, camera lock, reapply, and reset.
 - **Health and resources:** independent numeric, percentage, both, or hidden displays.
+- **Healing feedback:** incoming-heal preview after current HP, accounting for missing health and heal absorbs, plus floating healing-received numbers. Toggle separately under **Cog → Health and resource text → Healing feedback**.
+- **Talents:** choose a tree in the Character window, click available talents, and **Apply** to learn them; **Undo all** clears pending changes while keeping learned talents. Editing follows native restrictions and is disabled during combat.
 - **Stats:** four slots for weapon damage, armor, ammo, weapon DPS, crit, spell/healing info, rested XP, current-fight DPS, or highest-damage ability. Equipment icons are shown where supported.
 - **Indicators:** PvP/combat icons, text, both, or hidden; Warcraft/simple frames and inactive visibility options.
 - **Quick slots:** drag items or spells to the optional six-slot panel; hiding it retains assignments.
@@ -137,7 +141,7 @@ See **[CONFIGURATION.md](docs/CONFIGURATION.md)** for all settings and how they'
 
 ## Supported client and compatibility
 
-V1.0 targets WoW Forever 1.60.1 / Interface 16001. Combat statistics require the native Forever damage meter. Addons that replace or reposition the same native frames can affect the layout; include your addon list when reporting a conflict. Independent positioning of the micro menu and bag-button group is planned for a later patch.
+1.1.0 targets WoW Forever 1.60.1.71139 / Interface 16001. The build 71139 native UI changes and talent/healing API declarations were reviewed, and Lua regression checks passed; gameplay testing after this game update remains pending. Combat statistics require the native Forever damage meter. Addons that replace or reposition the same native frames can affect the layout; include your addon list when reporting a conflict. Independent positioning of the micro menu and bag-button group is planned for a later patch.
 
 **Found a bug or have an idea?** [Open an issue](https://github.com/Hmimesh/WIIIUIForever/issues) with:
 
